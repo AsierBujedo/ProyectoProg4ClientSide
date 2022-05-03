@@ -29,8 +29,8 @@ using namespace std;
 Properties properties;
 SOCKET s;
 char sendBuff[512], recvBuff[512];
-#define SERVER_IP "127.0.0.1"
-#define SERVER_PORT 6000
+#define SERVER_IP "127.0.0.1" // Fichero de configuración
+#define SERVER_PORT 6000 // Fichero de configuración
 
 int prepareSocket() {
 	WSADATA wsaData;
@@ -92,7 +92,6 @@ void manageProdMenu() {
 	switch (opt) {
 	case 1:
 		logFile(INFO, "Opción 1 de manageProdMenu seleccionada (addProduct)");
-//		addProduct();
 
 		// SENDING command ADDPROD
 		strcpy(sendBuff, "ADDPROD");
@@ -111,7 +110,6 @@ void manageProdMenu() {
 	case 2:
 		logFile(INFO,
 				"Opción 2 de manageProdMenu seleccionada (deleteProduct)");
-//		deleteProduct();
 
 		// SENDING command DELPROD
 		strcpy(sendBuff, "DELPROD");
@@ -130,7 +128,6 @@ void manageProdMenu() {
 	case 3:
 		logFile(INFO,
 				"Opción 3 de manageProdMenu seleccionada (updateProduct)");
-//		updateProduct();
 
 		// SENDING command UDPROD
 		strcpy(sendBuff, "UDPROD");
@@ -178,7 +175,6 @@ void manageSuperMenu() {
 	case 1:
 		logFile(INFO,
 				"Opción 1 de manageSuperMenu seleccionada (addSupermarket)");
-//		addSupermarket();
 
 		// SENDING command ADDSMKT
 		strcpy(sendBuff, "ADDSMKT");
@@ -197,7 +193,6 @@ void manageSuperMenu() {
 	case 2:
 		logFile(INFO,
 				"Opción 2 de manageSuperMenu seleccionada (deleteSupermarket)");
-//		deleteSupermarket();
 
 		// SENDING command DELSMKT
 		strcpy(sendBuff, "DELSMKT");
@@ -216,7 +211,6 @@ void manageSuperMenu() {
 	case 3:
 		logFile(INFO,
 				"Opción 3 de manageSuperMenu seleccionada (updateSupermarket())");
-//		updateSupermarket();
 
 		// SENDING command UDSMKT
 		strcpy(sendBuff, "UDSMKT");
@@ -298,7 +292,6 @@ void queryBDMenu() {
 	case 1:
 		logFile(INFO,
 				"Opción 1 de queryBDMenu seleccionada (showSupermarkets)");
-//		showSupermarkets(true);
 
 		// SENDING command SHOWSMKTS
 		strcpy(sendBuff, "SHOWSMKTS");
@@ -316,7 +309,6 @@ void queryBDMenu() {
 
 	case 2:
 		logFile(INFO, "Opción 2 de queryBDMenu seleccionada (showProducts)");
-//		showProducts(true);
 
 		// SENDING command SHOWPRODS
 		strcpy(sendBuff, "SHOWPRODS");
@@ -370,7 +362,6 @@ void adminMenu() {
 
 	case 3:
 		logFile(INFO, "Opción 3 de adminMenu seleccionada (showStatistics)");
-//		showStatistics();
 
 		// SENDING command SHOWSTATS
 		strcpy(sendBuff, "SHOWSTATS");
@@ -418,7 +409,6 @@ void userMenu() {
 
 	case 2:
 		logFile(INFO, "Opción 2 de userMenu seleccionada (showStatistics)");
-//		showStatistics();
 
 		// SENDING command SHOWSTATS
 		strcpy(sendBuff, "SHOWSTATS");
