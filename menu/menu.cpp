@@ -66,7 +66,9 @@ int prepareSocket() {
 
 	printf("Connection stablished with: %s (%d)\n", inet_ntoa(server.sin_addr),
 			ntohs(server.sin_port));
+
 	mainMenu(false);
+
 	return 1;
 }
 

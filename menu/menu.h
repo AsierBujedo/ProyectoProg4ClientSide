@@ -9,6 +9,7 @@
 #define MENU_MENU_H_
 #include <stdbool.h>
 
+int prepareSocket();
 void mainMenu(bool b);
 void adminAccessMenu();
 void userMenu();
