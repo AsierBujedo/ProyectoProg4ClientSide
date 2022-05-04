@@ -66,14 +66,20 @@ int prepareSocket() {
 
 	printf("Connection stablished with: %s (%d)\n", inet_ntoa(server.sin_addr),
 			ntohs(server.sin_port));
-
+	mainMenu(false);
 	return 1;
 }
 
 // NIVEL DE MENÚ: 5 (administrador)
 void manageProdMenu() {
+	char str[512];
+	char strAux[2];
+	int id_prod;
+	char nom_prod[128];
+	double precio_prod;
+	char desc_prod[128];
+
 	int opt;
-	char str[10];
 
 	printf("\n-------------------\n");
 	printf("GESTIONAR PRODUCTOS\n");
@@ -92,8 +98,49 @@ void manageProdMenu() {
 	case 1:
 		logFile(INFO, "Opción 1 de manageProdMenu seleccionada (addProduct)");
 
+		printf("\n---------------\n");
+		printf("AÑADIR PRODUCTO\n");
+		printf("---------------\n\n");
+
+		printf("\nIntroduzca el código: ");
+			fflush(stdout);
+			fgets(str, 512, stdin);
+			fflush(stdin);
+			sscanf(str, "%i", &id_prod);
+
+			printf("\nIntroduzca el nombre (separe la palabras con '_'): ");
+			fflush(stdout);
+			fgets(nom_prod, 512, stdin);
+			fflush(stdin);
+			sscanf(nom_prod, "%s", nom_prod);
+
+			printf("\nIntroduzca el precio: ");
+			fflush(stdout);
+			fgets(str, 512, stdin);
+			fflush(stdin);
+			sscanf(str, "%lf", &precio_prod);
+
+			printf("\nIntroduzca la descripción (separe la palabras con '_'): ");
+			fflush(stdout);
+			fgets(desc_prod, 512, stdin);
+			fflush(stdin);
+			sscanf(desc_prod, "%s", desc_prod);
+
+
+
 		// SENDING command ADDPROD
 		strcpy(sendBuff, "ADDPROD");
+
+		//FALTA PROBAR; IGUAL EL CASTEO DA PROBLEMAS
+		char* precio_char;
+
+		sprintf(precio_char,"%f",precio_prod);
+
+		strcpy(sendBuff, (char*) id_prod);
+		strcpy(sendBuff, nom_prod);
+		strcpy(sendBuff, precio_char);
+		strcpy(sendBuff, desc_prod);
+
 		strcpy(sendBuff, "ADDPROD-END");
 		send(s, sendBuff, sizeof(sendBuff), 0);
 
