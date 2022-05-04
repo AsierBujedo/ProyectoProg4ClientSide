@@ -1,3 +1,4 @@
+
 /*
  * menu.cpp
  *
@@ -7,10 +8,8 @@
 
 extern "C" {
 #include "menu.h"
-#include "../handler/server/server.h"
-#include "../functions/functions.h"
-#include "../handler/logger/logger.h"
-#include "../handler/properties/properties.h"
+#include "../logger/logger.h"
+#include "../properties/properties.h"
 }
 
 //#include "menu.h"
