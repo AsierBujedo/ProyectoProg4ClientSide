@@ -1,4 +1,3 @@
-
 /*
  * menu.cpp
  *
@@ -22,6 +21,7 @@ extern "C" {
 #include <string.h>
 #include <winsock2.h>
 #include <iostream>
+#define MAX_LINE 40
 
 using namespace std;
 
@@ -74,13 +74,13 @@ int prepareSocket() {
 
 // NIVEL DE MENÚ: 5 (administrador)
 void manageProdMenu() {
-	char str[512];
+	char *sql;
+	char str[MAX_LINE];
 	char strAux[2];
-	int id_prod;
-	char nom_prod[128];
-	double precio_prod;
-	char desc_prod[128];
-
+	char id_prod[MAX_LINE];
+	char nom_prod[MAX_LINE];
+	char precio_prod[MAX_LINE];
+	char desc_prod[MAX_LINE];
 	int opt;
 
 	printf("\n-------------------\n");
@@ -100,56 +100,94 @@ void manageProdMenu() {
 	case 1:
 		logFile(INFO, "Opción 1 de manageProdMenu seleccionada (addProduct)");
 
+		{
+			sql = "INSERT INTO PRODUCTO VALUES (?, ?, ?, ?)";
+		}
+
 		printf("\n---------------\n");
 		printf("AÑADIR PRODUCTO\n");
 		printf("---------------\n\n");
 
-		printf("\nIntroduzca el código: ");
-			fflush(stdout);
-			fgets(str, 512, stdin);
-			fflush(stdin);
-			sscanf(str, "%i", &id_prod);
+		// EQUIVALENTE A showProductPK() --------------------------------------------------
 
-			printf("\nIntroduzca el nombre (separe la palabras con '_'): ");
-			fflush(stdout);
-			fgets(nom_prod, 512, stdin);
-			fflush(stdin);
-			sscanf(nom_prod, "%s", nom_prod);
-
-			printf("\nIntroduzca el precio: ");
-			fflush(stdout);
-			fgets(str, 512, stdin);
-			fflush(stdin);
-			sscanf(str, "%lf", &precio_prod);
-
-			printf("\nIntroduzca la descripción (separe la palabras con '_'): ");
-			fflush(stdout);
-			fgets(desc_prod, 512, stdin);
-			fflush(stdin);
-			sscanf(desc_prod, "%s", desc_prod);
-
-
-
-		// SENDING command ADDPROD
-		strcpy(sendBuff, "ADDPROD");
-
-		//FALTA PROBAR; IGUAL EL CASTEO DA PROBLEMAS
-		char* precio_char;
-
-		sprintf(precio_char,"%f",precio_prod);
-
-		strcpy(sendBuff, (char*) id_prod);
-		strcpy(sendBuff, nom_prod);
-		strcpy(sendBuff, precio_char);
-		strcpy(sendBuff, desc_prod);
-
-		strcpy(sendBuff, "ADDPROD-END");
+		// SENDING command SHOWPRODSPK
+		strcpy(sendBuff, "SHOWPRODSPK");
 		send(s, sendBuff, sizeof(sendBuff), 0);
 
-		// RECEIVING response to command ADDPROD from the server
+		// RECEIVING response to command SHOWPRODSPK from the server
+		recv(s, recvBuff, sizeof(recvBuff), 0);
+//		printf("Suma = %s \n", recvBuff);
+		cout << recvBuff << endl;
+
+		// --------------------------------------------------------------------------------
+
+		printf("\nIntroduzca el código: ");
+		fflush(stdout);
+		fgets(id_prod, 512, stdin);
+		fflush(stdin);
+		sscanf(id_prod, "%s", id_prod);
+//		p.id_prod = id_prod;
+
+		printf("\nIntroduzca el nombre (separe la palabras con '_'): ");
+		fflush(stdout);
+		fgets(nom_prod, 512, stdin);
+		fflush(stdin);
+		sscanf(nom_prod, "%s", nom_prod);
+//		p.nom_prod = nom_prod;
+
+		printf("\nIntroduzca el precio: ");
+		fflush(stdout);
+		fgets(precio_prod, 512, stdin);
+		fflush(stdin);
+		sscanf(precio_prod, "%s", precio_prod);
+//		p.precio_prod = precio_prod;
+
+		printf("\nIntroduzca la descripción (separe la palabras con '_'): ");
+		fflush(stdout);
+		fgets(desc_prod, 512, stdin);
+		fflush(stdin);
+		sscanf(desc_prod, "%s", desc_prod);
+//		p.desc_prod = desc_prod;
+
+// EQUIVALENTE A addProductDB(sql, p) --------------------------------------------------
+
+// SENDING command ADDPRODDB
+		strcpy(sendBuff, "ADDPRODDB");
+		send(s, sendBuff, sizeof(sendBuff), 0);
+
+		// Enviar sql
+		strcpy(sendBuff, sql);
+		send(s, sendBuff, sizeof(sendBuff), 0);
+
+		// Enviar id_prod
+		strcpy(sendBuff, id_prod);
+		send(s, sendBuff, sizeof(sendBuff), 0);
+
+		// Enviar nom_prod
+		strcpy(sendBuff, nom_prod);
+		send(s, sendBuff, sizeof(sendBuff), 0);
+
+		// Enviar precio_prod
+		strcpy(sendBuff, precio_prod);
+		send(s, sendBuff, sizeof(sendBuff), 0);
+
+		// Enviar desc_prod
+		strcpy(sendBuff, desc_prod);
+		send(s, sendBuff, sizeof(sendBuff), 0);
+
+		strcpy(sendBuff, "ADDPRODDB-END");
+		send(s, sendBuff, sizeof(sendBuff), 0);
+
+		// RECEIVING response to command ADDPRODDB from the server
 		recv(s, recvBuff, sizeof(recvBuff), 0);
 //		printf("Suma = %s \n", recvBuff);
 		cout << " " << endl;
+		// --------------------------------------------------------------------------------
+
+		printf("\n¡Producto añadido con éxito! Pulse ENTER para continuar: ");
+		fflush(stdout);
+		fgets(strAux, 2, stdin);
+		fflush(stdin);
 
 		logFile(INFO, "manageProdMenu<<");
 		manageProdMenu();
@@ -159,15 +197,75 @@ void manageProdMenu() {
 		logFile(INFO,
 				"Opción 2 de manageProdMenu seleccionada (deleteProduct)");
 
-		// SENDING command DELPROD
-		strcpy(sendBuff, "DELPROD");
-		strcpy(sendBuff, "DELPROD-END");
+		{
+			sql = "DELETE FROM PRODUCTO WHERE ID_PROD = ?;";
+			char opt;
+		}
+
+		printf("\n-----------------\n");
+		printf("ELIMINAR PRODUCTO\n");
+		printf("-----------------\n\n");
+
+		// EQUIVALENTE A showProducts(false) --------------------------------------------------
+
+		// SENDING command SHOWPRODS
+		strcpy(sendBuff, "SHOWPRODS");
 		send(s, sendBuff, sizeof(sendBuff), 0);
 
-		// RECEIVING response to command DELPROD from the server
+		// RECEIVING response to command SHOWPRODS from the server
 		recv(s, recvBuff, sizeof(recvBuff), 0);
 //		printf("Suma = %s \n", recvBuff);
-		cout << " " << endl;
+		cout << recvBuff << endl;
+
+		// --------------------------------------------------------------------------------
+
+		printf("\nIntroduzca el código del producto a eliminar: ");
+		fflush(stdout);
+		fgets(id_prod, MAX_LINE, stdin);
+		fflush(stdin);
+		sscanf(id_prod, "%s", id_prod);
+
+		printf("\n¿Está seguro? Si continua se eliminará el producto [s/n]: ");
+		fflush(stdout);
+		fgets(str, MAX_LINE, stdin);
+		fflush(stdin);
+		sscanf(str, "%c", &opt);
+
+		// Asumimos que el usuario solo introducirá una 's' o una 'n'
+		if (opt == 's') {
+
+			// EQUIVALENTE A deleteProductDB(sql, id_prod) --------------------------------------------------
+
+			// SENDING command DELPRODDB
+			strcpy(sendBuff, "DELPRODDB");
+			send(s, sendBuff, sizeof(sendBuff), 0);
+
+			// Enviar sql
+			strcpy(sendBuff, sql);
+			send(s, sendBuff, sizeof(sendBuff), 0);
+
+			// Enviar id_prod
+			strcpy(sendBuff, id_prod);
+			send(s, sendBuff, sizeof(sendBuff), 0);
+
+			strcpy(sendBuff, "DELPRODDB-END");
+			send(s, sendBuff, sizeof(sendBuff), 0);
+
+			// RECEIVING response to command DELPRODDB from the server
+			recv(s, recvBuff, sizeof(recvBuff), 0);
+//		printf("Suma = %s \n", recvBuff);
+			cout << " " << endl;
+
+			// --------------------------------------------------------------------------------
+
+			printf(
+					"\n¡Producto eliminado correctamente! Pulse ENTER para continuar: ");
+			fflush(stdout);
+			fgets(strAux, 2, stdin);
+			fflush(stdin);
+		} else if (opt == 'n') {
+			manageProdMenu();
+		}
 
 		logFile(INFO, "manageProdMenu<<");
 		manageProdMenu();
@@ -177,15 +275,97 @@ void manageProdMenu() {
 		logFile(INFO,
 				"Opción 3 de manageProdMenu seleccionada (updateProduct)");
 
-		// SENDING command UDPROD
-		strcpy(sendBuff, "UDPROD");
-		strcpy(sendBuff, "UDPROD-END");
+		{
+			sql =
+					"UPDATE PRODUCTO SET NOM_PROD = ?, PRECIO_PROD = ?, DESC_PROD = ? WHERE ID_PROD = ?";
+		}
+
+		printf("\n-------------------\n");
+		printf("ACTUALIZAR PRODUCTO\n");
+		printf("-------------------\n\n");
+
+		// EQUIVALENTE A showProducts(false) --------------------------------------------------
+
+		// SENDING command SHOWPRODS
+		strcpy(sendBuff, "SHOWPRODS");
 		send(s, sendBuff, sizeof(sendBuff), 0);
 
-		// RECEIVING response to command UDPROD from the server
+		// RECEIVING response to command SHOWPRODS from the server
+		recv(s, recvBuff, sizeof(recvBuff), 0);
+		//		printf("Suma = %s \n", recvBuff);
+		cout << recvBuff << endl;
+
+		// --------------------------------------------------------------------------------
+
+		printf("\nIntroduzca el código del producto a actualizar: ");
+		fflush(stdout);
+		fgets(id_prod, MAX_LINE, stdin);
+		fflush(stdin);
+		sscanf(id_prod, "%s", id_prod);
+//		p.id_prod = id_prod;
+
+		printf(
+				"\nIntroduzca el (posible nuevo) nombre (separe la palabras con '_'): ");
+		fflush(stdout);
+		fgets(nom_prod, MAX_LINE, stdin);
+		fflush(stdin);
+		sscanf(nom_prod, "%s", nom_prod);
+//		p.nom_prod = nom_prod;
+
+		printf("\nIntroduzca el (posible nuevo) precio: ");
+		fflush(stdout);
+		fgets(precio_prod, MAX_LINE, stdin);
+		fflush(stdin);
+		sscanf(precio_prod, "%s", precio_prod);
+//		p.precio_prod = precio_prod;
+
+		printf(
+				"\nIntroduzca la (posible nueva) descripción (separe la palabras con '_'): ");
+		fflush(stdout);
+		fgets(desc_prod, MAX_LINE, stdin);
+		fflush(stdin);
+		sscanf(desc_prod, "%s", desc_prod);
+//		p.desc_prod = desc_prod;
+
+// EQUIVALENTE A updateProductDB(sql, p) --------------------------------------------------
+
+// SENDING command UDPRODDB
+		strcpy(sendBuff, "UDPRODDB");
+		send(s, sendBuff, sizeof(sendBuff), 0);
+
+		// Enviar sql
+		strcpy(sendBuff, sql);
+		send(s, sendBuff, sizeof(sendBuff), 0);
+
+		// Enviar id_prod
+		strcpy(sendBuff, id_prod);
+		send(s, sendBuff, sizeof(sendBuff), 0);
+
+		// Enviar nom_prod
+		strcpy(sendBuff, nom_prod);
+		send(s, sendBuff, sizeof(sendBuff), 0);
+
+		// Enviar precio_prod
+		strcpy(sendBuff, precio_prod);
+		send(s, sendBuff, sizeof(sendBuff), 0);
+
+		// Enviar desc_prod
+		strcpy(sendBuff, desc_prod);
+		send(s, sendBuff, sizeof(sendBuff), 0);
+
+		strcpy(sendBuff, "UDPRODDB-END");
+		send(s, sendBuff, sizeof(sendBuff), 0);
+
+		// RECEIVING response to command UDPRODDB from the server
 		recv(s, recvBuff, sizeof(recvBuff), 0);
 //		printf("Suma = %s \n", recvBuff);
 		cout << " " << endl;
+
+		printf(
+				"\n¡Supermercado actualizado correctamente! Pulse ENTER para continuar: ");
+		fflush(stdout);
+		fgets(strAux, 2, stdin);
+		fflush(stdin);
 
 		logFile(INFO, "manageProdMenu<<");
 		manageProdMenu();
@@ -203,8 +383,16 @@ void manageProdMenu() {
 
 // NIVEL DE MENÚ: 5 (administrador)
 void manageSuperMenu() {
+	char *sql;
+	char str[MAX_LINE];
+	char strAux[2];
+	char cod_s[MAX_LINE];
+	char nom_s[MAX_LINE];
+	char dir_s[MAX_LINE];
+	char tlf_s[MAX_LINE];
+	char metros_cuad_s[MAX_LINE];
+	char cod_ciu[MAX_LINE];
 	int opt;
-	char str[10];
 
 	printf("\n-----------------------\n");
 	printf("GESTIONAR SUPERMERCADOS\n");
@@ -223,16 +411,118 @@ void manageSuperMenu() {
 	case 1:
 		logFile(INFO,
 				"Opción 1 de manageSuperMenu seleccionada (addSupermarket)");
+		{
+			sql = "INSERT INTO SUPERMERCADO VALUES (?, ?, ?, ?, ?, ?);";
+		}
 
-		// SENDING command ADDSMKT
-		strcpy(sendBuff, "ADDSMKT");
-		strcpy(sendBuff, "ADDSMKT-END");
+		printf("\n-------------------\n");
+		printf("AÑADIR SUPERMERCADO\n");
+		printf("-------------------\n\n");
+
+		//EQUIVALENTE A showSupermarketPK() --------------------------------------------------
+
+		// SENDING command SHOWSMKTSPK
+		strcpy(sendBuff, "SHOWSMKTSPK");
 		send(s, sendBuff, sizeof(sendBuff), 0);
 
-		// RECEIVING response to command ADDSMKT from the server
+		// RECEIVING response to command SHOWSMKTSPK from the server
+		recv(s, recvBuff, sizeof(recvBuff), 0);
+//		printf("Suma = %s \n", recvBuff);
+		cout << recvBuff << endl;
+
+		// --------------------------------------------------------------------------------
+
+		printf("\nIntroduzca el código: ");
+		fflush(stdout);
+		fgets(cod_s, MAX_LINE, stdin);
+		fflush(stdin);
+		sscanf(cod_s, "%s", cod_s);
+//		s.cod_s = cod_s;
+
+		printf("\nIntroduzca el nombre (separe la palabras con '_'): ");
+		fflush(stdout);
+		fgets(nom_s, MAX_LINE, stdin);
+		fflush(stdin);
+		sscanf(nom_s, "%s", nom_s);
+//		s.nom_s = nom_s;
+
+		printf("\nIntroduzca la dirección (separe la palabras con '_'): ");
+		fflush(stdout);
+		fgets(dir_s, MAX_LINE, stdin);
+		fflush(stdin);
+		sscanf(dir_s, "%s", dir_s);
+//		s.dir_s = dir_s;
+
+		printf("\nIntroduzca el teléfono: ");
+		fflush(stdout);
+		fgets(tlf_s, MAX_LINE, stdin);
+		fflush(stdin);
+		sscanf(tlf_s, "%s", tlf_s);
+//		s.tlf_s = tlf_s;
+
+		printf("\nIntroduzca los metros cuadrados: ");
+		fflush(stdout);
+		fgets(metros_cuad_s, MAX_LINE, stdin);
+		fflush(stdin);
+		sscanf(metros_cuad_s, "%s", metros_cuad_s);
+//		s.metros_cuad_s = metros_cuad_s;
+
+		printf("\nIntroduzca el código de la ciudad: ");
+		fflush(stdout);
+		fgets(cod_ciu, MAX_LINE, stdin);
+		fflush(stdin);
+		sscanf(cod_ciu, "%s", cod_ciu);
+//		s.cod_ciu = cod_ciu;
+
+// EQUIVALENTE A addSupermarketDB(sql, s) --------------------------------------------------
+
+// SENDING command ADDSMKTDB
+		strcpy(sendBuff, "ADDSMKTDB");
+		send(s, sendBuff, sizeof(sendBuff), 0);
+
+		// Enviar sql
+		strcpy(sendBuff, sql);
+		send(s, sendBuff, sizeof(sendBuff), 0);
+
+		// Enviar cod_s
+		strcpy(sendBuff, cod_s);
+		send(s, sendBuff, sizeof(sendBuff), 0);
+
+		// Enviar nom_s
+		strcpy(sendBuff, nom_s);
+		send(s, sendBuff, sizeof(sendBuff), 0);
+
+		// Enviar dir_s
+		strcpy(sendBuff, dir_s);
+		send(s, sendBuff, sizeof(sendBuff), 0);
+
+		// Enviar tlf_s
+		strcpy(sendBuff, tlf_s);
+		send(s, sendBuff, sizeof(sendBuff), 0);
+
+		// Enviar metros_cuad_s
+		strcpy(sendBuff, metros_cuad_s);
+		send(s, sendBuff, sizeof(sendBuff), 0);
+
+		// Enviar cod_ciu
+		strcpy(sendBuff, cod_ciu);
+		send(s, sendBuff, sizeof(sendBuff), 0);
+
+		strcpy(sendBuff, "ADDSMKTDB-END");
+		send(s, sendBuff, sizeof(sendBuff), 0);
+
+		// RECEIVING response to command ADDSMKTDB from the server
 		recv(s, recvBuff, sizeof(recvBuff), 0);
 //		printf("Suma = %s \n", recvBuff);
 		cout << " " << endl;
+
+		// --------------------------------------------------------------------------------
+
+		printf(
+				"\n¡Supermercado añadido con éxito! Pulse ENTER para continuar: ");
+		fflush(stdout);
+		fgets(strAux, 2, stdin);
+		fflush(stdin);
 
 		logFile(INFO, "manageSuperMenu<<");
 		manageSuperMenu();
@@ -242,15 +532,75 @@ void manageSuperMenu() {
 		logFile(INFO,
 				"Opción 2 de manageSuperMenu seleccionada (deleteSupermarket)");
 
-		// SENDING command DELSMKT
-		strcpy(sendBuff, "DELSMKT");
-		strcpy(sendBuff, "DELSMKT-END");
+		{
+			sql = "DELETE FROM SUPERMERCADO WHERE COD_S = ?;";
+		}
+
+		printf("\n---------------------\n");
+		printf("ELIMINAR SUPERMERCADO\n");
+		printf("---------------------\n\n");
+
+		// EQUIVALENTE A showSupermarkets(false) --------------------------------------------------
+
+		// SENDING command SHOWSMKTS
+		strcpy(sendBuff, "SHOWSMKTS");
 		send(s, sendBuff, sizeof(sendBuff), 0);
 
-		// RECEIVING response to command DELSMKT from the server
+		// RECEIVING response to command SHOWSMKTS from the server
 		recv(s, recvBuff, sizeof(recvBuff), 0);
 //		printf("Suma = %s \n", recvBuff);
-		cout << " " << endl;
+		cout << recvBuff << endl;
+
+		// --------------------------------------------------------------------------------
+
+		printf("\nIntroduzca el código del supermercado a eliminar: ");
+		fflush(stdout);
+		fgets(cod_s, MAX_LINE, stdin);
+		fflush(stdin);
+		sscanf(cod_s, "%s", cod_s);
+
+		printf(
+				"\n¿Está seguro? Si continua se eliminará el supermercado [s/n]: ");
+		fflush(stdout);
+		fgets(str, MAX_LINE, stdin);
+		fflush(stdin);
+		sscanf(str, "%c", &opt);
+
+		// Asumimos que el usuario solo introducirá una 's' o una 'n'
+		if (opt == 's') {
+
+			// EQUIVALENTE A deleteSupermarketDB(sql, cod_s) --------------------------------------------------
+
+			// SENDING command DELSMKTDB
+			strcpy(sendBuff, "DELSMKTDB");
+			send(s, sendBuff, sizeof(sendBuff), 0);
+
+			// Enviar sql
+			strcpy(sendBuff, sql);
+			send(s, sendBuff, sizeof(sendBuff), 0);
+
+			// Enviar cod_s
+			strcpy(sendBuff, cod_s);
+			send(s, sendBuff, sizeof(sendBuff), 0);
+
+			strcpy(sendBuff, "DELSMKTDB-END");
+			send(s, sendBuff, sizeof(sendBuff), 0);
+
+			// RECEIVING response to command DELPRODDB from the server
+			recv(s, recvBuff, sizeof(recvBuff), 0);
+			//		printf("Suma = %s \n", recvBuff);
+			cout << " " << endl;
+
+			// --------------------------------------------------------------------------------
+
+			printf(
+					"\n¡Supermercado eliminado correctamente! Pulse ENTER para continuar: ");
+			fflush(stdout);
+			fgets(strAux, 2, stdin);
+			fflush(stdin);
+		} else if (opt == 'n') {
+			manageSuperMenu();
+		}
 
 		logFile(INFO, "manageSuperMenu<<");
 		manageSuperMenu();
@@ -260,15 +610,116 @@ void manageSuperMenu() {
 		logFile(INFO,
 				"Opción 3 de manageSuperMenu seleccionada (updateSupermarket())");
 
-		// SENDING command UDSMKT
-		strcpy(sendBuff, "UDSMKT");
-		strcpy(sendBuff, "UDSMKT-END");
+		printf("\n-----------------------\n");
+		printf("ACTUALIZAR SUPERMERCADO\n");
+		printf("-----------------------\n\n");
+
+		// EQUIVALENTE A showSupermarkets(false) --------------------------------------------------
+
+		// SENDING command SHOWSMKTS
+		strcpy(sendBuff, "SHOWSMKTS");
 		send(s, sendBuff, sizeof(sendBuff), 0);
 
-		// RECEIVING response to command UDSMKT from the server
+		// RECEIVING response to command SHOWSMKTS from the server
+		recv(s, recvBuff, sizeof(recvBuff), 0);
+		//		printf("Suma = %s \n", recvBuff);
+		cout << recvBuff << endl;
+
+		// --------------------------------------------------------------------------------
+
+		printf("\nIntroduzca el código del supermercado a actualizar: ");
+		fflush(stdout);
+		fgets(cod_s, MAX_LINE, stdin);
+		fflush(stdin);
+		sscanf(cod_s, "%s", cod_s);
+//		s.cod_s = cod_s;
+
+		printf(
+				"\nIntroduzca el (posible nuevo) nombre (separe la palabras con '_'): ");
+		fflush(stdout);
+		fgets(nom_s, MAX_LINE, stdin);
+		fflush(stdin);
+		sscanf(nom_s, "%s", nom_s);
+//		s.nom_s = nom_s;
+
+		printf(
+				"\nIntroduzca la (posible nueva) dirección (separe la palabras con '_'): ");
+		fflush(stdout);
+		fgets(dir_s, MAX_LINE, stdin);
+		fflush(stdin);
+		sscanf(dir_s, "%s", dir_s);
+//		s.dir_s = dir_s;
+
+		printf("\nIntroduzca el (posible nuevo) teléfono: ");
+		fflush(stdout);
+		fgets(tlf_s, MAX_LINE, stdin);
+		fflush(stdin);
+		sscanf(tlf_s, "%s", tlf_s);
+//		s.tlf_s = tlf_s;
+
+		printf("\nIntroduzca los (posibles nuevos) metros cuadrados: ");
+		fflush(stdout);
+		fgets(metros_cuad_s, MAX_LINE, stdin);
+		fflush(stdin);
+		sscanf(metros_cuad_s, "%s", metros_cuad_s);
+//		s.metros_cuad_s = metros_cuad_s;
+
+		printf("\nIntroduzca el (posible nuevo) código de la ciudad: ");
+		fflush(stdout);
+		fgets(cod_ciu, MAX_LINE, stdin);
+		fflush(stdin);
+		sscanf(cod_ciu, "%s", cod_ciu);
+//		s.cod_ciu = cod_ciu;
+
+// EQUIVALENTE A updateSupermarketDB(sql, s) --------------------------------------------------
+
+// SENDING command UDSMKTDB
+		strcpy(sendBuff, "UDSMKTDB");
+		send(s, sendBuff, sizeof(sendBuff), 0);
+
+		// Enviar sql
+		strcpy(sendBuff, sql);
+		send(s, sendBuff, sizeof(sendBuff), 0);
+
+		// Enviar cod_s
+		strcpy(sendBuff, cod_s);
+		send(s, sendBuff, sizeof(sendBuff), 0);
+
+		// Enviar nom_s
+		strcpy(sendBuff, nom_s);
+		send(s, sendBuff, sizeof(sendBuff), 0);
+
+		// Enviar dir_s
+		strcpy(sendBuff, dir_s);
+		send(s, sendBuff, sizeof(sendBuff), 0);
+
+		// Enviar tlf_s
+		strcpy(sendBuff, tlf_s);
+		send(s, sendBuff, sizeof(sendBuff), 0);
+
+		// Enviar metros_cuad_s
+		strcpy(sendBuff, metros_cuad_s);
+		send(s, sendBuff, sizeof(sendBuff), 0);
+
+		// Enviar cod_ciu
+		strcpy(sendBuff, cod_ciu);
+		send(s, sendBuff, sizeof(sendBuff), 0);
+
+		strcpy(sendBuff, "UDSMKTDB-END");
+		send(s, sendBuff, sizeof(sendBuff), 0);
+
+		// RECEIVING response to command UDSMKTDB from the server
 		recv(s, recvBuff, sizeof(recvBuff), 0);
 //		printf("Suma = %s \n", recvBuff);
 		cout << " " << endl;
+
+		// --------------------------------------------------------------------------------
+
+		printf(
+				"\n¡Supermercado actualizado correctamente! Pulse ENTER para continuar: ");
+		fflush(stdout);
+		fgets(strAux, 2, stdin);
+		fflush(stdin);
 
 		logFile(INFO, "manageSuperMenu<<");
 		manageSuperMenu();
@@ -343,7 +794,6 @@ void queryBDMenu() {
 
 		// SENDING command SHOWSMKTS
 		strcpy(sendBuff, "SHOWSMKTS");
-		strcpy(sendBuff, "SHOWSMKTS-END");
 		send(s, sendBuff, sizeof(sendBuff), 0);
 
 		// RECEIVING response to command SHOWSMKTS from the server
@@ -360,7 +810,6 @@ void queryBDMenu() {
 
 		// SENDING command SHOWPRODS
 		strcpy(sendBuff, "SHOWPRODS");
-		strcpy(sendBuff, "SHOWPRODS-END");
 		send(s, sendBuff, sizeof(sendBuff), 0);
 
 		// RECEIVING response to command SHOWPRODS from the server
@@ -381,6 +830,7 @@ void queryBDMenu() {
 
 // NIVEL DE MENÚ: 3
 void adminMenu() {
+	char strAux[2];
 	int opt;
 	char str[10];
 
@@ -411,15 +861,34 @@ void adminMenu() {
 	case 3:
 		logFile(INFO, "Opción 3 de adminMenu seleccionada (showStatistics)");
 
+		printf("\n------------\n");
+		printf("ESTADÍSTICAS\n");
+		printf("------------\n\n");
+
 		// SENDING command SHOWSTATS
 		strcpy(sendBuff, "SHOWSTATS");
-		strcpy(sendBuff, "SHOWSTATS-END");
 		send(s, sendBuff, sizeof(sendBuff), 0);
 
 		// RECEIVING response to command SHOWSTATS from the server
 		recv(s, recvBuff, sizeof(recvBuff), 0);
-//		printf("Suma = %s \n", recvBuff);
-		cout << " " << endl;
+
+		// -------------------------------------------------- NOS HEMOS QUEDADO AQUÍ ------------------------------------------------------------
+
+//		printf("Media de los precios de los productos: %.2lf€\n",
+//				sqlite3_column_double(datos1.stmt, 0));
+//		printf("Media de los metros cuadrados de los supermercados: %.2lfm\n",
+//				sqlite3_column_double(datos2.stmt, 0));
+
+		cout << "Media de los precios de los productos: " << endl;
+		cout << "Media de los metros cuadrados de los supermercados: " << endl;
+
+		logFile(INFO, "Estadísticas mostradas");
+
+		printf(
+				"\n¡Estadísticas mostradas! Pulse ENTER para volver al menú principal: ");
+		fflush(stdout);
+		fgets(strAux, 2, stdin);
+		fflush(stdin);
 
 		logFile(INFO, "mainMenu<<");
 		mainMenu(true);
@@ -434,6 +903,7 @@ void adminMenu() {
 
 // NIVEL DE MENÚ: 2
 void userMenu() {
+	char strAux[2];
 	int opt;
 	char str[10];
 
@@ -458,15 +928,29 @@ void userMenu() {
 	case 2:
 		logFile(INFO, "Opción 2 de userMenu seleccionada (showStatistics)");
 
+		printf("\n------------\n");
+		printf("ESTADÍSTICAS\n");
+		printf("------------\n\n");
+
 		// SENDING command SHOWSTATS
 		strcpy(sendBuff, "SHOWSTATS");
-		strcpy(sendBuff, "SHOWSTATS-END");
 		send(s, sendBuff, sizeof(sendBuff), 0);
 
 		// RECEIVING response to command SHOWSTATS from the server
 		recv(s, recvBuff, sizeof(recvBuff), 0);
-//		printf("Suma = %s \n", recvBuff);
+//		printf("Media de los precios de los productos: %.2lf€\n",
+//				sqlite3_column_double(datos1.stmt, 0));
+//		printf("Media de los metros cuadrados de los supermercados: %.2lfm\n",
+//				sqlite3_column_double(datos2.stmt, 0));
 		cout << " " << endl;
+
+		logFile(INFO, "Estadísticas mostradas");
+
+		printf(
+				"\n¡Estadísticas mostradas! Pulse ENTER para volver al menú principal: ");
+		fflush(stdout);
+		fgets(strAux, 2, stdin);
+		fflush(stdin);
 
 		logFile(INFO, "mainMenu<<");
 		mainMenu(true);
@@ -554,4 +1038,3 @@ void mainMenu(bool b) {
 	}
 
 }
-
