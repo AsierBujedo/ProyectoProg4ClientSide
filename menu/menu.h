@@ -14,9 +14,9 @@ void mainMenu(bool b);
 void adminAccessMenu();
 void userMenu();
 void adminMenu();
-void queryBDMenu();
+void queryBDMenu(bool b); // Se ha añadido el argumento bool b
 void updateBDMenu();
-void manageSuperMenu();
-void manageProdMenu();
+void manageSuperMenu(bool b); // Se ha añadido el argumento bool b
+void manageProdMenu(bool b); // Se ha añadido el argumento bool b
 
 #endif /* MENU_MENU_H_ */

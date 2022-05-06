@@ -15,12 +15,6 @@ extern "C" {
 #include <winsock2.h>
 }
 
-//#include "menu.h"
-//#include "../handler/server/server.h"
-//#include "../functions/functions.h"
-//#include "../handler/logger/logger.h"
-//#include "../handler/properties/properties.h"
-
 #include <iostream>
 #define MAX_LINE 40
 
@@ -74,7 +68,7 @@ int prepareSocket() {
 }
 
 // NIVEL DE MENÚ: 5 (administrador)
-void manageProdMenu() {
+void manageProdMenu(bool b) {
 	char *sql;
 	char str[MAX_LINE];
 	char strAux[2];
@@ -130,28 +124,24 @@ void manageProdMenu() {
 		fgets(id_prod, 512, stdin);
 		fflush(stdin);
 		sscanf(id_prod, "%s", id_prod);
-//		p.id_prod = id_prod;
 
 		printf("\nIntroduzca el nombre (separe la palabras con '_'): ");
 		fflush(stdout);
 		fgets(nom_prod, 512, stdin);
 		fflush(stdin);
 		sscanf(nom_prod, "%s", nom_prod);
-//		p.nom_prod = nom_prod;
 
 		printf("\nIntroduzca el precio: ");
 		fflush(stdout);
 		fgets(precio_prod, 512, stdin);
 		fflush(stdin);
 		sscanf(precio_prod, "%s", precio_prod);
-//		p.precio_prod = precio_prod;
 
 		printf("\nIntroduzca la descripción (separe la palabras con '_'): ");
 		fflush(stdout);
 		fgets(desc_prod, 512, stdin);
 		fflush(stdin);
 		sscanf(desc_prod, "%s", desc_prod);
-//		p.desc_prod = desc_prod;
 
 // EQUIVALENTE A addProductDB(sql, p) --------------------------------------------------
 
@@ -182,11 +172,11 @@ void manageProdMenu() {
 //		strcpy(sendBuff, "ADDPRODDB-END");
 //		send(s, sendBuff, sizeof(sendBuff), 0);
 
-		// RECEIVING response to command ADDPRODDB from the server
-		recv(s, recvBuff, sizeof(recvBuff), 0);
-//		printf("Suma = %s \n", recvBuff);
-		cout << " " << endl;
-		// --------------------------------------------------------------------------------
+//		// RECEIVING response to command ADDPRODDB from the server
+//		recv(s, recvBuff, sizeof(recvBuff), 0);
+//		cout << " " << endl;
+
+// --------------------------------------------------------------------------------
 
 		printf("\n¡Producto añadido con éxito! Pulse ENTER para continuar: ");
 		fflush(stdout);
@@ -194,7 +184,7 @@ void manageProdMenu() {
 		fflush(stdin);
 
 		logFile(INFO, "manageProdMenu<<");
-		manageProdMenu();
+		manageProdMenu(false);
 		break;
 
 	case 2:
@@ -210,6 +200,14 @@ void manageProdMenu() {
 		printf("ELIMINAR PRODUCTO\n");
 		printf("-----------------\n\n");
 
+		if (b) {
+			printf("\n---------------------------\n");
+			printf("LISTA COMPLETA DE PRODUCTOS\n");
+			printf("---------------------------\n\n");
+		}
+
+		printf("CODIGO || NOMBRE || PRECIO || DESCRIPCION\n\n");
+
 		// EQUIVALENTE A showProducts(false) --------------------------------------------------
 
 		// SENDING command SHOWPRODS
@@ -218,10 +216,28 @@ void manageProdMenu() {
 
 		// RECEIVING response to command SHOWPRODS from the server
 		recv(s, recvBuff, sizeof(recvBuff), 0);
-//		printf("Suma = %s \n", recvBuff);
-		cout << recvBuff << endl;
+		cout << recvBuff << " || " << endl;
+
+		recv(s, recvBuff, sizeof(recvBuff), 0);
+		cout << recvBuff << " || " << endl;
+
+		recv(s, recvBuff, sizeof(recvBuff), 0);
+		cout << recvBuff << " || " << endl;
+
+		recv(s, recvBuff, sizeof(recvBuff), 0);
+		cout << recvBuff << "/n" << endl;
 
 		// --------------------------------------------------------------------------------
+
+		logFile(INFO, "Lista completa de productos mostrada");
+
+		if (b) {
+			printf(
+					"\n¡Lista completa de productos mostrada! Pulse ENTER para volver al menú principal: ");
+			fflush(stdout);
+			fgets(strAux, 2, stdin);
+			fflush(stdin);
+		}
 
 		printf("\nIntroduzca el código del producto a eliminar: ");
 		fflush(stdout);
@@ -252,15 +268,14 @@ void manageProdMenu() {
 			strcpy(sendBuff, id_prod);
 			send(s, sendBuff, sizeof(sendBuff), 0);
 
-			strcpy(sendBuff, "DELPRODDB-END");
-			send(s, sendBuff, sizeof(sendBuff), 0);
+//			strcpy(sendBuff, "DELPRODDB-END");
+//			send(s, sendBuff, sizeof(sendBuff), 0);
 
-			// RECEIVING response to command DELPRODDB from the server
-			recv(s, recvBuff, sizeof(recvBuff), 0);
-//		printf("Suma = %s \n", recvBuff);
-			cout << " " << endl;
+//			// RECEIVING response to command DELPRODDB from the server
+//			recv(s, recvBuff, sizeof(recvBuff), 0);
+//			cout << " " << endl;
 
-			// --------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------
 
 			printf(
 					"\n¡Producto eliminado correctamente! Pulse ENTER para continuar: ");
@@ -268,11 +283,11 @@ void manageProdMenu() {
 			fgets(strAux, 2, stdin);
 			fflush(stdin);
 		} else if (opt == 'n') {
-			manageProdMenu();
+			manageProdMenu(false);
 		}
 
 		logFile(INFO, "manageProdMenu<<");
-		manageProdMenu();
+		manageProdMenu(false);
 		break;
 
 	case 3:
@@ -288,6 +303,14 @@ void manageProdMenu() {
 		printf("ACTUALIZAR PRODUCTO\n");
 		printf("-------------------\n\n");
 
+		if (b) {
+			printf("\n---------------------------\n");
+			printf("LISTA COMPLETA DE PRODUCTOS\n");
+			printf("---------------------------\n\n");
+		}
+
+		printf("CODIGO || NOMBRE || PRECIO || DESCRIPCION\n\n");
+
 		// EQUIVALENTE A showProducts(false) --------------------------------------------------
 
 		// SENDING command SHOWPRODS
@@ -296,17 +319,34 @@ void manageProdMenu() {
 
 		// RECEIVING response to command SHOWPRODS from the server
 		recv(s, recvBuff, sizeof(recvBuff), 0);
-		//		printf("Suma = %s \n", recvBuff);
-		cout << recvBuff << endl;
+		cout << recvBuff << " || " << endl;
+
+		recv(s, recvBuff, sizeof(recvBuff), 0);
+		cout << recvBuff << " || " << endl;
+
+		recv(s, recvBuff, sizeof(recvBuff), 0);
+		cout << recvBuff << " || " << endl;
+
+		recv(s, recvBuff, sizeof(recvBuff), 0);
+		cout << recvBuff << "/n" << endl;
 
 		// --------------------------------------------------------------------------------
+
+		logFile(INFO, "Lista completa de productos mostrada");
+
+		if (b) {
+			printf(
+					"\n¡Lista completa de productos mostrada! Pulse ENTER para volver al menú principal: ");
+			fflush(stdout);
+			fgets(strAux, 2, stdin);
+			fflush(stdin);
+		}
 
 		printf("\nIntroduzca el código del producto a actualizar: ");
 		fflush(stdout);
 		fgets(id_prod, MAX_LINE, stdin);
 		fflush(stdin);
 		sscanf(id_prod, "%s", id_prod);
-//		p.id_prod = id_prod;
 
 		printf(
 				"\nIntroduzca el (posible nuevo) nombre (separe la palabras con '_'): ");
@@ -314,14 +354,12 @@ void manageProdMenu() {
 		fgets(nom_prod, MAX_LINE, stdin);
 		fflush(stdin);
 		sscanf(nom_prod, "%s", nom_prod);
-//		p.nom_prod = nom_prod;
 
 		printf("\nIntroduzca el (posible nuevo) precio: ");
 		fflush(stdout);
 		fgets(precio_prod, MAX_LINE, stdin);
 		fflush(stdin);
 		sscanf(precio_prod, "%s", precio_prod);
-//		p.precio_prod = precio_prod;
 
 		printf(
 				"\nIntroduzca la (posible nueva) descripción (separe la palabras con '_'): ");
@@ -329,7 +367,6 @@ void manageProdMenu() {
 		fgets(desc_prod, MAX_LINE, stdin);
 		fflush(stdin);
 		sscanf(desc_prod, "%s", desc_prod);
-//		p.desc_prod = desc_prod;
 
 // EQUIVALENTE A updateProductDB(sql, p) --------------------------------------------------
 
@@ -357,13 +394,12 @@ void manageProdMenu() {
 		strcpy(sendBuff, desc_prod);
 		send(s, sendBuff, sizeof(sendBuff), 0);
 
-		strcpy(sendBuff, "UDPRODDB-END");
-		send(s, sendBuff, sizeof(sendBuff), 0);
-
-		// RECEIVING response to command UDPRODDB from the server
-		recv(s, recvBuff, sizeof(recvBuff), 0);
-//		printf("Suma = %s \n", recvBuff);
-		cout << " " << endl;
+//		strcpy(sendBuff, "UDPRODDB-END");
+//		send(s, sendBuff, sizeof(sendBuff), 0);
+//
+//		// RECEIVING response to command UDPRODDB from the server
+//		recv(s, recvBuff, sizeof(recvBuff), 0);
+//		cout << " " << endl;
 
 		printf(
 				"\n¡Supermercado actualizado correctamente! Pulse ENTER para continuar: ");
@@ -372,7 +408,7 @@ void manageProdMenu() {
 		fflush(stdin);
 
 		logFile(INFO, "manageProdMenu<<");
-		manageProdMenu();
+		manageProdMenu(false);
 		break;
 
 	case 4:
@@ -380,13 +416,13 @@ void manageProdMenu() {
 				"Opción 4 de manageProdMenu seleccionada (updateBDMenu<<)");
 		updateBDMenu();
 		logFile(INFO, "manageProdMenu<<");
-		manageProdMenu();
+		manageProdMenu(false);
 		break;
 	}
 }
 
 // NIVEL DE MENÚ: 5 (administrador)
-void manageSuperMenu() {
+void manageSuperMenu(bool b) {
 	char *sql;
 	char str[MAX_LINE];
 	char strAux[2];
@@ -444,42 +480,36 @@ void manageSuperMenu() {
 		fgets(cod_s, MAX_LINE, stdin);
 		fflush(stdin);
 		sscanf(cod_s, "%s", cod_s);
-//		s.cod_s = cod_s;
 
 		printf("\nIntroduzca el nombre (separe la palabras con '_'): ");
 		fflush(stdout);
 		fgets(nom_s, MAX_LINE, stdin);
 		fflush(stdin);
 		sscanf(nom_s, "%s", nom_s);
-//		s.nom_s = nom_s;
 
 		printf("\nIntroduzca la dirección (separe la palabras con '_'): ");
 		fflush(stdout);
 		fgets(dir_s, MAX_LINE, stdin);
 		fflush(stdin);
 		sscanf(dir_s, "%s", dir_s);
-//		s.dir_s = dir_s;
 
 		printf("\nIntroduzca el teléfono: ");
 		fflush(stdout);
 		fgets(tlf_s, MAX_LINE, stdin);
 		fflush(stdin);
 		sscanf(tlf_s, "%s", tlf_s);
-//		s.tlf_s = tlf_s;
 
 		printf("\nIntroduzca los metros cuadrados: ");
 		fflush(stdout);
 		fgets(metros_cuad_s, MAX_LINE, stdin);
 		fflush(stdin);
 		sscanf(metros_cuad_s, "%s", metros_cuad_s);
-//		s.metros_cuad_s = metros_cuad_s;
 
 		printf("\nIntroduzca el código de la ciudad: ");
 		fflush(stdout);
 		fgets(cod_ciu, MAX_LINE, stdin);
 		fflush(stdin);
 		sscanf(cod_ciu, "%s", cod_ciu);
-//		s.cod_ciu = cod_ciu;
 
 // EQUIVALENTE A addSupermarketDB(sql, s) --------------------------------------------------
 
@@ -515,15 +545,14 @@ void manageSuperMenu() {
 		strcpy(sendBuff, cod_ciu);
 		send(s, sendBuff, sizeof(sendBuff), 0);
 
-		strcpy(sendBuff, "ADDSMKTDB-END");
-		send(s, sendBuff, sizeof(sendBuff), 0);
+//		strcpy(sendBuff, "ADDSMKTDB-END");
+//		send(s, sendBuff, sizeof(sendBuff), 0);
 
-		// RECEIVING response to command ADDSMKTDB from the server
-		recv(s, recvBuff, sizeof(recvBuff), 0);
-//		printf("Suma = %s \n", recvBuff);
-		cout << " " << endl;
+//		// RECEIVING response to command ADDSMKTDB from the server
+//		recv(s, recvBuff, sizeof(recvBuff), 0);
+//		cout << " " << endl;
 
-		// --------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------
 
 		printf(
 				"\n¡Supermercado añadido con éxito! Pulse ENTER para continuar: ");
@@ -532,7 +561,7 @@ void manageSuperMenu() {
 		fflush(stdin);
 
 		logFile(INFO, "manageSuperMenu<<");
-		manageSuperMenu();
+		manageSuperMenu(false);
 		break;
 
 	case 2:
@@ -547,6 +576,15 @@ void manageSuperMenu() {
 		printf("ELIMINAR SUPERMERCADO\n");
 		printf("---------------------\n\n");
 
+		if (b) {
+			printf("\n-------------------------------\n");
+			printf("LISTA COMPLETA DE SUPERMERCADOS\n");
+			printf("-------------------------------\n\n");
+		}
+
+		printf(
+				"CODIGO || NOMBRE || DIRECCION || TELEFONO || METROS_CUADRADOS || CODIGO_CIUDAD\n\n");
+
 		// EQUIVALENTE A showSupermarkets(false) --------------------------------------------------
 
 		// SENDING command SHOWSMKTS
@@ -555,10 +593,34 @@ void manageSuperMenu() {
 
 		// RECEIVING response to command SHOWSMKTS from the server
 		recv(s, recvBuff, sizeof(recvBuff), 0);
-//		printf("Suma = %s \n", recvBuff);
-		cout << recvBuff << endl;
+		cout << recvBuff << " || " << endl;
+
+		recv(s, recvBuff, sizeof(recvBuff), 0);
+		cout << recvBuff << " || " << endl;
+
+		recv(s, recvBuff, sizeof(recvBuff), 0);
+		cout << recvBuff << " || " << endl;
+
+		recv(s, recvBuff, sizeof(recvBuff), 0);
+		cout << recvBuff << " || " << endl;
+
+		recv(s, recvBuff, sizeof(recvBuff), 0);
+		cout << recvBuff << " || " << endl;
+
+		recv(s, recvBuff, sizeof(recvBuff), 0);
+		cout << recvBuff << "\n" << endl;
 
 		// --------------------------------------------------------------------------------
+
+		logFile(INFO, "Lista completa de supermercados mostrada");
+
+		if (b) {
+			printf(
+					"\n¡Lista completa de supermercados mostrada! Pulse ENTER para volver al menú principal: ");
+			fflush(stdout);
+			fgets(strAux, 2, stdin);
+			fflush(stdin);
+		}
 
 		printf("\nIntroduzca el código del supermercado a eliminar: ");
 		fflush(stdout);
@@ -590,15 +652,14 @@ void manageSuperMenu() {
 			strcpy(sendBuff, cod_s);
 			send(s, sendBuff, sizeof(sendBuff), 0);
 
-			strcpy(sendBuff, "DELSMKTDB-END");
-			send(s, sendBuff, sizeof(sendBuff), 0);
+//			strcpy(sendBuff, "DELSMKTDB-END");
+//			send(s, sendBuff, sizeof(sendBuff), 0);
 
-			// RECEIVING response to command DELPRODDB from the server
-			recv(s, recvBuff, sizeof(recvBuff), 0);
-			//		printf("Suma = %s \n", recvBuff);
-			cout << " " << endl;
+//			// RECEIVING response to command DELSMKTDB from the server
+//			recv(s, recvBuff, sizeof(recvBuff), 0);
+//			cout << " " << endl;
 
-			// --------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------
 
 			printf(
 					"\n¡Supermercado eliminado correctamente! Pulse ENTER para continuar: ");
@@ -606,11 +667,11 @@ void manageSuperMenu() {
 			fgets(strAux, 2, stdin);
 			fflush(stdin);
 		} else if (opt == 'n') {
-			manageSuperMenu();
+			manageSuperMenu(false);
 		}
 
 		logFile(INFO, "manageSuperMenu<<");
-		manageSuperMenu();
+		manageSuperMenu(false);
 		break;
 
 	case 3:
@@ -621,6 +682,15 @@ void manageSuperMenu() {
 		printf("ACTUALIZAR SUPERMERCADO\n");
 		printf("-----------------------\n\n");
 
+		if (b) {
+			printf("\n-------------------------------\n");
+			printf("LISTA COMPLETA DE SUPERMERCADOS\n");
+			printf("-------------------------------\n\n");
+		}
+
+		printf(
+				"CODIGO || NOMBRE || DIRECCION || TELEFONO || METROS_CUADRADOS || CODIGO_CIUDAD\n\n");
+
 		// EQUIVALENTE A showSupermarkets(false) --------------------------------------------------
 
 		// SENDING command SHOWSMKTS
@@ -629,17 +699,40 @@ void manageSuperMenu() {
 
 		// RECEIVING response to command SHOWSMKTS from the server
 		recv(s, recvBuff, sizeof(recvBuff), 0);
-		//		printf("Suma = %s \n", recvBuff);
-		cout << recvBuff << endl;
+		cout << recvBuff << " || " << endl;
+
+		recv(s, recvBuff, sizeof(recvBuff), 0);
+		cout << recvBuff << " || " << endl;
+
+		recv(s, recvBuff, sizeof(recvBuff), 0);
+		cout << recvBuff << " || " << endl;
+
+		recv(s, recvBuff, sizeof(recvBuff), 0);
+		cout << recvBuff << " || " << endl;
+
+		recv(s, recvBuff, sizeof(recvBuff), 0);
+		cout << recvBuff << " || " << endl;
+
+		recv(s, recvBuff, sizeof(recvBuff), 0);
+		cout << recvBuff << "\n" << endl;
 
 		// --------------------------------------------------------------------------------
+
+		logFile(INFO, "Lista completa de supermercados mostrada");
+
+		if (b) {
+			printf(
+					"\n¡Lista completa de supermercados mostrada! Pulse ENTER para volver al menú principal: ");
+			fflush(stdout);
+			fgets(strAux, 2, stdin);
+			fflush(stdin);
+		}
 
 		printf("\nIntroduzca el código del supermercado a actualizar: ");
 		fflush(stdout);
 		fgets(cod_s, MAX_LINE, stdin);
 		fflush(stdin);
 		sscanf(cod_s, "%s", cod_s);
-//		s.cod_s = cod_s;
 
 		printf(
 				"\nIntroduzca el (posible nuevo) nombre (separe la palabras con '_'): ");
@@ -647,7 +740,6 @@ void manageSuperMenu() {
 		fgets(nom_s, MAX_LINE, stdin);
 		fflush(stdin);
 		sscanf(nom_s, "%s", nom_s);
-//		s.nom_s = nom_s;
 
 		printf(
 				"\nIntroduzca la (posible nueva) dirección (separe la palabras con '_'): ");
@@ -655,28 +747,24 @@ void manageSuperMenu() {
 		fgets(dir_s, MAX_LINE, stdin);
 		fflush(stdin);
 		sscanf(dir_s, "%s", dir_s);
-//		s.dir_s = dir_s;
 
 		printf("\nIntroduzca el (posible nuevo) teléfono: ");
 		fflush(stdout);
 		fgets(tlf_s, MAX_LINE, stdin);
 		fflush(stdin);
 		sscanf(tlf_s, "%s", tlf_s);
-//		s.tlf_s = tlf_s;
 
 		printf("\nIntroduzca los (posibles nuevos) metros cuadrados: ");
 		fflush(stdout);
 		fgets(metros_cuad_s, MAX_LINE, stdin);
 		fflush(stdin);
 		sscanf(metros_cuad_s, "%s", metros_cuad_s);
-//		s.metros_cuad_s = metros_cuad_s;
 
 		printf("\nIntroduzca el (posible nuevo) código de la ciudad: ");
 		fflush(stdout);
 		fgets(cod_ciu, MAX_LINE, stdin);
 		fflush(stdin);
 		sscanf(cod_ciu, "%s", cod_ciu);
-//		s.cod_ciu = cod_ciu;
 
 // EQUIVALENTE A updateSupermarketDB(sql, s) --------------------------------------------------
 
@@ -712,15 +800,14 @@ void manageSuperMenu() {
 		strcpy(sendBuff, cod_ciu);
 		send(s, sendBuff, sizeof(sendBuff), 0);
 
-		strcpy(sendBuff, "UDSMKTDB-END");
-		send(s, sendBuff, sizeof(sendBuff), 0);
+//		strcpy(sendBuff, "UDSMKTDB-END");
+//		send(s, sendBuff, sizeof(sendBuff), 0);
+//
+//		// RECEIVING response to command UDSMKTDB from the server
+//		recv(s, recvBuff, sizeof(recvBuff), 0);
+//		cout << " " << endl;
 
-		// RECEIVING response to command UDSMKTDB from the server
-		recv(s, recvBuff, sizeof(recvBuff), 0);
-//		printf("Suma = %s \n", recvBuff);
-		cout << " " << endl;
-
-		// --------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------
 
 		printf(
 				"\n¡Supermercado actualizado correctamente! Pulse ENTER para continuar: ");
@@ -729,7 +816,7 @@ void manageSuperMenu() {
 		fflush(stdin);
 
 		logFile(INFO, "manageSuperMenu<<");
-		manageSuperMenu();
+		manageSuperMenu(false);
 		break;
 
 	case 4:
@@ -761,13 +848,13 @@ void updateBDMenu() {
 	case 1:
 		logFile(INFO,
 				"Opción 1 de updateBDMenu seleccionada (>>manageSuperMenu)");
-		manageSuperMenu();
+		manageSuperMenu(false);
 		break;
 
 	case 2:
 		logFile(INFO,
 				"Opción 2 de updateBDMenu seleccionada (>>manageProdMenu)");
-		manageProdMenu();
+		manageProdMenu(false);
 		break;
 
 	case 3:
@@ -778,7 +865,7 @@ void updateBDMenu() {
 }
 
 // NIVEL DE MENÚ: 3 (usuario) y 4 (administrador)
-void queryBDMenu() {
+void queryBDMenu(bool b) {
 	char strAux[2];
 	int opt;
 	char str[10];
@@ -809,6 +896,8 @@ void queryBDMenu() {
 		printf(
 				"CODIGO || NOMBRE || DIRECCION || TELEFONO || METROS_CUADRADOS || CODIGO_CIUDAD\n\n");
 
+		// EQUIVALENTE A showSupermarkets(true) --------------------------------------------------
+
 		// SENDING command SHOWSMKTS
 		strcpy(sendBuff, "SHOWSMKTS");
 		send(s, sendBuff, sizeof(sendBuff), 0);
@@ -831,6 +920,8 @@ void queryBDMenu() {
 
 		recv(s, recvBuff, sizeof(recvBuff), 0);
 		cout << recvBuff << "\n" << endl;
+
+		// --------------------------------------------------------------------------------
 
 		logFile(INFO, "Lista completa de supermercados mostrada");
 
@@ -857,6 +948,8 @@ void queryBDMenu() {
 
 		printf("CODIGO || NOMBRE || PRECIO || DESCRIPCION\n\n");
 
+		// EQUIVALENTE A showProducts(true) --------------------------------------------------
+
 		// SENDING command SHOWPRODS
 		strcpy(sendBuff, "SHOWPRODS");
 		send(s, sendBuff, sizeof(sendBuff), 0);
@@ -873,6 +966,8 @@ void queryBDMenu() {
 
 		recv(s, recvBuff, sizeof(recvBuff), 0);
 		cout << recvBuff << "/n" << endl;
+
+		// --------------------------------------------------------------------------------
 
 		logFile(INFO, "Lista completa de productos mostrada");
 
@@ -922,7 +1017,7 @@ void adminMenu() {
 
 	case 2:
 		logFile(INFO, "Opción 2 de adminMenu seleccionada (>>queryBDMenu)");
-		queryBDMenu();
+		queryBDMenu(true);
 		break;
 
 	case 3:
@@ -984,7 +1079,7 @@ void userMenu() {
 	switch (opt) {
 	case 1:
 		logFile(INFO, "Opción 1 de userMenu seleccionada (>>queryBDMenu)");
-		queryBDMenu();
+		queryBDMenu(true);
 		break;
 
 	case 2:
