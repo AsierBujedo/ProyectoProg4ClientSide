@@ -9,6 +9,10 @@ extern "C" {
 #include "menu.h"
 #include "../logger/logger.h"
 #include "../properties/properties.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <winsock2.h>
 }
 
 //#include "menu.h"
@@ -16,10 +20,7 @@ extern "C" {
 //#include "../functions/functions.h"
 //#include "../handler/logger/logger.h"
 //#include "../handler/properties/properties.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <winsock2.h>
+
 #include <iostream>
 #define MAX_LINE 40
 
@@ -108,6 +109,8 @@ void manageProdMenu() {
 		printf("AÑADIR PRODUCTO\n");
 		printf("---------------\n\n");
 
+		printf("CODIGOS DE PRODUCTO ACTUALES\n");
+
 		// EQUIVALENTE A showProductPK() --------------------------------------------------
 
 		// SENDING command SHOWPRODSPK
@@ -116,10 +119,11 @@ void manageProdMenu() {
 
 		// RECEIVING response to command SHOWPRODSPK from the server
 		recv(s, recvBuff, sizeof(recvBuff), 0);
-//		printf("Suma = %s \n", recvBuff);
-		cout << recvBuff << endl;
+		cout << recvBuff << "/n" << endl;
 
 		// --------------------------------------------------------------------------------
+
+		logFile(INFO, "Códigos de productos mostrados");
 
 		printf("\nIntroduzca el código: ");
 		fflush(stdout);
@@ -175,8 +179,8 @@ void manageProdMenu() {
 		strcpy(sendBuff, desc_prod);
 		send(s, sendBuff, sizeof(sendBuff), 0);
 
-		strcpy(sendBuff, "ADDPRODDB-END");
-		send(s, sendBuff, sizeof(sendBuff), 0);
+//		strcpy(sendBuff, "ADDPRODDB-END");
+//		send(s, sendBuff, sizeof(sendBuff), 0);
 
 		// RECEIVING response to command ADDPRODDB from the server
 		recv(s, recvBuff, sizeof(recvBuff), 0);
@@ -419,6 +423,8 @@ void manageSuperMenu() {
 		printf("AÑADIR SUPERMERCADO\n");
 		printf("-------------------\n\n");
 
+		printf("CODIGOS DE SUPERMERCADO ACTUALES\n");
+
 		//EQUIVALENTE A showSupermarketPK() --------------------------------------------------
 
 		// SENDING command SHOWSMKTSPK
@@ -427,10 +433,11 @@ void manageSuperMenu() {
 
 		// RECEIVING response to command SHOWSMKTSPK from the server
 		recv(s, recvBuff, sizeof(recvBuff), 0);
-//		printf("Suma = %s \n", recvBuff);
-		cout << recvBuff << endl;
+		cout << recvBuff << "/n" << endl;
 
 		// --------------------------------------------------------------------------------
+
+		logFile(INFO, "Códigos de supermercados mostrados");
 
 		printf("\nIntroduzca el código: ");
 		fflush(stdout);
@@ -772,6 +779,7 @@ void updateBDMenu() {
 
 // NIVEL DE MENÚ: 3 (usuario) y 4 (administrador)
 void queryBDMenu() {
+	char strAux[2];
 	int opt;
 	char str[10];
 
@@ -792,14 +800,47 @@ void queryBDMenu() {
 		logFile(INFO,
 				"Opción 1 de queryBDMenu seleccionada (showSupermarkets)");
 
+		if (b) {
+			printf("\n-------------------------------\n");
+			printf("LISTA COMPLETA DE SUPERMERCADOS\n");
+			printf("-------------------------------\n\n");
+		}
+
+		printf(
+				"CODIGO || NOMBRE || DIRECCION || TELEFONO || METROS_CUADRADOS || CODIGO_CIUDAD\n\n");
+
 		// SENDING command SHOWSMKTS
 		strcpy(sendBuff, "SHOWSMKTS");
 		send(s, sendBuff, sizeof(sendBuff), 0);
 
 		// RECEIVING response to command SHOWSMKTS from the server
 		recv(s, recvBuff, sizeof(recvBuff), 0);
-//		printf("Suma = %s \n", recvBuff);
-		cout << " " << endl;
+		cout << recvBuff << " || " << endl;
+
+		recv(s, recvBuff, sizeof(recvBuff), 0);
+		cout << recvBuff << " || " << endl;
+
+		recv(s, recvBuff, sizeof(recvBuff), 0);
+		cout << recvBuff << " || " << endl;
+
+		recv(s, recvBuff, sizeof(recvBuff), 0);
+		cout << recvBuff << " || " << endl;
+
+		recv(s, recvBuff, sizeof(recvBuff), 0);
+		cout << recvBuff << " || " << endl;
+
+		recv(s, recvBuff, sizeof(recvBuff), 0);
+		cout << recvBuff << "\n" << endl;
+
+		logFile(INFO, "Lista completa de supermercados mostrada");
+
+		if (b) {
+			printf(
+					"\n¡Lista completa de supermercados mostrada! Pulse ENTER para volver al menú principal: ");
+			fflush(stdout);
+			fgets(strAux, 2, stdin);
+			fflush(stdin);
+		}
 
 		logFile(INFO, "mainMenu<<");
 		mainMenu(true);
@@ -808,14 +849,40 @@ void queryBDMenu() {
 	case 2:
 		logFile(INFO, "Opción 2 de queryBDMenu seleccionada (showProducts)");
 
+		if (b) {
+			printf("\n---------------------------\n");
+			printf("LISTA COMPLETA DE PRODUCTOS\n");
+			printf("---------------------------\n\n");
+		}
+
+		printf("CODIGO || NOMBRE || PRECIO || DESCRIPCION\n\n");
+
 		// SENDING command SHOWPRODS
 		strcpy(sendBuff, "SHOWPRODS");
 		send(s, sendBuff, sizeof(sendBuff), 0);
 
 		// RECEIVING response to command SHOWPRODS from the server
 		recv(s, recvBuff, sizeof(recvBuff), 0);
-//		printf("Suma = %s \n", recvBuff);
-		cout << " " << endl;
+		cout << recvBuff << " || " << endl;
+
+		recv(s, recvBuff, sizeof(recvBuff), 0);
+		cout << recvBuff << " || " << endl;
+
+		recv(s, recvBuff, sizeof(recvBuff), 0);
+		cout << recvBuff << " || " << endl;
+
+		recv(s, recvBuff, sizeof(recvBuff), 0);
+		cout << recvBuff << "/n" << endl;
+
+		logFile(INFO, "Lista completa de productos mostrada");
+
+		if (b) {
+			printf(
+					"\n¡Lista completa de productos mostrada! Pulse ENTER para volver al menú principal: ");
+			fflush(stdout);
+			fgets(strAux, 2, stdin);
+			fflush(stdin);
+		}
 
 		logFile(INFO, "mainMenu<<");
 		mainMenu(true);
@@ -871,16 +938,11 @@ void adminMenu() {
 
 		// RECEIVING response to command SHOWSTATS from the server
 		recv(s, recvBuff, sizeof(recvBuff), 0);
+		cout << "Media de los precios de los productos: " << recvBuff << endl;
 
-		// -------------------------------------------------- NOS HEMOS QUEDADO AQUÍ ------------------------------------------------------------
-
-//		printf("Media de los precios de los productos: %.2lf€\n",
-//				sqlite3_column_double(datos1.stmt, 0));
-//		printf("Media de los metros cuadrados de los supermercados: %.2lfm\n",
-//				sqlite3_column_double(datos2.stmt, 0));
-
-		cout << "Media de los precios de los productos: " << endl;
-		cout << "Media de los metros cuadrados de los supermercados: " << endl;
+		recv(s, recvBuff, sizeof(recvBuff), 0);
+		cout << "Media de los metros cuadrados de los supermercados: "
+				<< recvBuff << endl;
 
 		logFile(INFO, "Estadísticas mostradas");
 
@@ -938,11 +1000,11 @@ void userMenu() {
 
 		// RECEIVING response to command SHOWSTATS from the server
 		recv(s, recvBuff, sizeof(recvBuff), 0);
-//		printf("Media de los precios de los productos: %.2lf€\n",
-//				sqlite3_column_double(datos1.stmt, 0));
-//		printf("Media de los metros cuadrados de los supermercados: %.2lfm\n",
-//				sqlite3_column_double(datos2.stmt, 0));
-		cout << " " << endl;
+		cout << "Media de los precios de los productos: " << recvBuff << endl;
+
+		recv(s, recvBuff, sizeof(recvBuff), 0);
+		cout << "Media de los metros cuadrados de los supermercados: "
+				<< recvBuff << endl;
 
 		logFile(INFO, "Estadísticas mostradas");
 
