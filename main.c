@@ -12,6 +12,7 @@
 #include "logger/logger.h"
 #include "properties/properties.h"
 
+
 int main() {
 	openLogger("marketlog.log");
 	Properties prop;

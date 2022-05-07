@@ -22,7 +22,7 @@ using namespace std;
 
 Properties properties;
 SOCKET s;
-char sendBuff[512], recvBuff[512];
+char sendBuff[512], recvBuff[2048];
 #define SERVER_IP "127.0.0.1" // Fichero de configuración
 #define SERVER_PORT 6000 // Fichero de configuración
 
@@ -113,7 +113,8 @@ void manageProdMenu(bool b) {
 
 		// RECEIVING response to command SHOWPRODSPK from the server
 		recv(s, recvBuff, sizeof(recvBuff), 0);
-		cout << recvBuff << "/n" << endl;
+		printf("%s\n", recvBuff);
+		//cout << recvBuff << "/n" << endl;
 
 		// --------------------------------------------------------------------------------
 
@@ -216,16 +217,20 @@ void manageProdMenu(bool b) {
 
 		// RECEIVING response to command SHOWPRODS from the server
 		recv(s, recvBuff, sizeof(recvBuff), 0);
-		cout << recvBuff << " || " << endl;
+		printf("&s || ", recvBuff);
+		//cout << recvBuff << " || " << endl;
 
 		recv(s, recvBuff, sizeof(recvBuff), 0);
-		cout << recvBuff << " || " << endl;
+		printf("&s || ", recvBuff);
+		//cout << recvBuff << " || " << endl;
 
 		recv(s, recvBuff, sizeof(recvBuff), 0);
-		cout << recvBuff << " || " << endl;
+		printf("&s || ", recvBuff);
+		//cout << recvBuff << " || " << endl;
 
 		recv(s, recvBuff, sizeof(recvBuff), 0);
-		cout << recvBuff << "/n" << endl;
+		printf("&s || \n", recvBuff);
+		//cout << recvBuff << "/n" << endl;
 
 		// --------------------------------------------------------------------------------
 
@@ -318,17 +323,22 @@ void manageProdMenu(bool b) {
 		send(s, sendBuff, sizeof(sendBuff), 0);
 
 		// RECEIVING response to command SHOWPRODS from the server
-		recv(s, recvBuff, sizeof(recvBuff), 0);
-		cout << recvBuff << " || " << endl;
 
 		recv(s, recvBuff, sizeof(recvBuff), 0);
-		cout << recvBuff << " || " << endl;
+		printf("&s || ", recvBuff);
+		//cout << recvBuff << " || " << endl;
 
 		recv(s, recvBuff, sizeof(recvBuff), 0);
-		cout << recvBuff << " || " << endl;
+		printf("&s || ", recvBuff);
+		//cout << recvBuff << " || " << endl;
 
 		recv(s, recvBuff, sizeof(recvBuff), 0);
-		cout << recvBuff << "/n" << endl;
+		printf("&s || ", recvBuff);
+		//cout << recvBuff << " || " << endl;
+
+		recv(s, recvBuff, sizeof(recvBuff), 0);
+		printf("&s || \n", recvBuff);
+		//cout << recvBuff << "/n" << endl;
 
 		// --------------------------------------------------------------------------------
 
@@ -469,7 +479,11 @@ void manageSuperMenu(bool b) {
 
 		// RECEIVING response to command SHOWSMKTSPK from the server
 		recv(s, recvBuff, sizeof(recvBuff), 0);
-		cout << recvBuff << "/n" << endl;
+		while (strcmp(recvBuff, "END") != 0) {
+			printf("%s\n", recvBuff);
+			recv(s, recvBuff, sizeof(recvBuff), 0);
+			//cout << recvBuff << "/n" << endl;
+		}
 
 		// --------------------------------------------------------------------------------
 
@@ -593,22 +607,28 @@ void manageSuperMenu(bool b) {
 
 		// RECEIVING response to command SHOWSMKTS from the server
 		recv(s, recvBuff, sizeof(recvBuff), 0);
-		cout << recvBuff << " || " << endl;
+		printf("%s || ", recvBuff);
+		//cout << recvBuff << " || " << endl;
 
 		recv(s, recvBuff, sizeof(recvBuff), 0);
-		cout << recvBuff << " || " << endl;
+		printf("%s || ", recvBuff);
+		//cout << recvBuff << " || " << endl;
 
 		recv(s, recvBuff, sizeof(recvBuff), 0);
-		cout << recvBuff << " || " << endl;
+		printf("%s || ", recvBuff);
+		//cout << recvBuff << " || " << endl;
 
 		recv(s, recvBuff, sizeof(recvBuff), 0);
-		cout << recvBuff << " || " << endl;
+		printf("%s || ", recvBuff);
+		//cout << recvBuff << " || " << endl;
 
 		recv(s, recvBuff, sizeof(recvBuff), 0);
-		cout << recvBuff << " || " << endl;
+		printf("%s || ", recvBuff);
+		//cout << recvBuff << " || " << endl;
 
 		recv(s, recvBuff, sizeof(recvBuff), 0);
-		cout << recvBuff << "\n" << endl;
+		printf("%s || \n", recvBuff);
+		//cout << recvBuff << "\n" << endl;
 
 		// --------------------------------------------------------------------------------
 
@@ -699,22 +719,28 @@ void manageSuperMenu(bool b) {
 
 		// RECEIVING response to command SHOWSMKTS from the server
 		recv(s, recvBuff, sizeof(recvBuff), 0);
-		cout << recvBuff << " || " << endl;
+		printf("%s || ", recvBuff);
+		//cout << recvBuff << " || " << endl;
 
 		recv(s, recvBuff, sizeof(recvBuff), 0);
-		cout << recvBuff << " || " << endl;
+		printf("%s || ", recvBuff);
+		//cout << recvBuff << " || " << endl;
 
 		recv(s, recvBuff, sizeof(recvBuff), 0);
-		cout << recvBuff << " || " << endl;
+		printf("%s || ", recvBuff);
+		//cout << recvBuff << " || " << endl;
 
 		recv(s, recvBuff, sizeof(recvBuff), 0);
-		cout << recvBuff << " || " << endl;
+		printf("%s || ", recvBuff);
+		//cout << recvBuff << " || " << endl;
 
 		recv(s, recvBuff, sizeof(recvBuff), 0);
-		cout << recvBuff << " || " << endl;
+		printf("%s || ", recvBuff);
+		//cout << recvBuff << " || " << endl;
 
 		recv(s, recvBuff, sizeof(recvBuff), 0);
-		cout << recvBuff << "\n" << endl;
+		printf("%s || \n", recvBuff);
+		//cout << recvBuff << "\n" << endl;
 
 		// --------------------------------------------------------------------------------
 
@@ -904,22 +930,28 @@ void queryBDMenu(bool b) {
 
 		// RECEIVING response to command SHOWSMKTS from the server
 		recv(s, recvBuff, sizeof(recvBuff), 0);
-		cout << recvBuff << " || " << endl;
+		printf("%s || ", recvBuff);
+		//cout << recvBuff << " || " << endl;
 
 		recv(s, recvBuff, sizeof(recvBuff), 0);
-		cout << recvBuff << " || " << endl;
+		printf("%s || ", recvBuff);
+		//cout << recvBuff << " || " << endl;
 
 		recv(s, recvBuff, sizeof(recvBuff), 0);
-		cout << recvBuff << " || " << endl;
+		printf("%s || ", recvBuff);
+		//cout << recvBuff << " || " << endl;
 
 		recv(s, recvBuff, sizeof(recvBuff), 0);
-		cout << recvBuff << " || " << endl;
+		printf("%s || ", recvBuff);
+		//cout << recvBuff << " || " << endl;
 
 		recv(s, recvBuff, sizeof(recvBuff), 0);
-		cout << recvBuff << " || " << endl;
+		printf("%s || ", recvBuff);
+		//cout << recvBuff << " || " << endl;
 
 		recv(s, recvBuff, sizeof(recvBuff), 0);
-		cout << recvBuff << "\n" << endl;
+		printf("%s || \n", recvBuff);
+		//cout << recvBuff << "\n" << endl;
 
 		// --------------------------------------------------------------------------------
 
@@ -956,16 +988,20 @@ void queryBDMenu(bool b) {
 
 		// RECEIVING response to command SHOWPRODS from the server
 		recv(s, recvBuff, sizeof(recvBuff), 0);
-		cout << recvBuff << " || " << endl;
+		printf("%s || ", recvBuff);
+		//cout << recvBuff << " || " << endl;
 
 		recv(s, recvBuff, sizeof(recvBuff), 0);
-		cout << recvBuff << " || " << endl;
+		printf("%s || ", recvBuff);
+		//cout << recvBuff << " || " << endl;
 
 		recv(s, recvBuff, sizeof(recvBuff), 0);
-		cout << recvBuff << " || " << endl;
+		printf("%s || ", recvBuff);
+		//cout << recvBuff << " || " << endl;
 
 		recv(s, recvBuff, sizeof(recvBuff), 0);
-		cout << recvBuff << "/n" << endl;
+		printf("%s || \n", recvBuff);
+		//cout << recvBuff << "/n" << endl;
 
 		// --------------------------------------------------------------------------------
 
@@ -1033,11 +1069,12 @@ void adminMenu() {
 
 		// RECEIVING response to command SHOWSTATS from the server
 		recv(s, recvBuff, sizeof(recvBuff), 0);
-		cout << "Media de los precios de los productos: " << recvBuff << endl;
+		printf("Media de los precios de los productos: %s\n", recvBuff);
+		//cout << "Media de los precios de los productos: " << recvBuff << endl;
 
 		recv(s, recvBuff, sizeof(recvBuff), 0);
-		cout << "Media de los metros cuadrados de los supermercados: "
-				<< recvBuff << endl;
+		printf("Media de los metros cuadrados de los supermercados: %s\n",
+				recvBuff);
 
 		logFile(INFO, "Estadísticas mostradas");
 
@@ -1089,17 +1126,22 @@ void userMenu() {
 		printf("ESTADÍSTICAS\n");
 		printf("------------\n\n");
 
+		//fflush(stdout);
+
 		// SENDING command SHOWSTATS
 		strcpy(sendBuff, "SHOWSTATS");
 		send(s, sendBuff, sizeof(sendBuff), 0);
 
 		// RECEIVING response to command SHOWSTATS from the server
 		recv(s, recvBuff, sizeof(recvBuff), 0);
-		cout << "Media de los precios de los productos: " << recvBuff << endl;
+		printf("Media de los precios de los productos: %s\n", recvBuff);
+		//cout << "Media de los precios de los productos: " << recvBuff << endl;
 
 		recv(s, recvBuff, sizeof(recvBuff), 0);
-		cout << "Media de los metros cuadrados de los supermercados: "
-				<< recvBuff << endl;
+		printf("Media de los metros cuadrados de los supermercados: %s\n",
+				recvBuff);
+		//cout << "Media de los metros cuadrados de los supermercados: "
+		//<< recvBuff << endl;
 
 		logFile(INFO, "Estadísticas mostradas");
 
