@@ -477,9 +477,9 @@ void manageSuperMenu(bool b) {
 	case 1:
 		logFile(INFO,
 				"Opción 1 de manageSuperMenu seleccionada (addSupermarket)");
-		{
-			sql = "INSERT INTO SUPERMERCADO VALUES (?, ?, ?, ?, ?, ?);";
-		}
+//		{
+//			sql = "INSERT INTO SUPERMERCADO VALUES (?, ?, ?, ?, ?, ?);";
+//		}
 
 		printf("\n-------------------\n");
 		printf("AÑADIR SUPERMERCADO\n");
@@ -546,11 +546,6 @@ void manageSuperMenu(bool b) {
 
 		// SENDING command ADDSMKTDB
 		strcpy(sendBuff, "ADDSMKTDB");
-		send(s, sendBuff, sizeof(sendBuff), 0);
-		printf("%s ", sendBuff); // Comp.
-
-		// Enviar sql
-		strcpy(sendBuff, sql);
 		send(s, sendBuff, sizeof(sendBuff), 0);
 		printf("%s ", sendBuff); // Comp.
 
