@@ -113,7 +113,10 @@ void manageProdMenu(bool b) {
 
 		// RECEIVING response to command SHOWPRODSPK from the server
 		recv(s, recvBuff, sizeof(recvBuff), 0);
-		printf("%s\n", recvBuff);
+		while (strcmp(recvBuff, "END")) {
+			printf("%s\n", recvBuff);
+			recv(s, recvBuff, sizeof(recvBuff), 0);
+		}
 		//cout << recvBuff << "/n" << endl;
 
 		// --------------------------------------------------------------------------------
@@ -217,20 +220,23 @@ void manageProdMenu(bool b) {
 
 		// RECEIVING response to command SHOWPRODS from the server
 		recv(s, recvBuff, sizeof(recvBuff), 0);
-		printf("&s || ", recvBuff);
-		//cout << recvBuff << " || " << endl;
+		while (strcmp(recvBuff, "END")) {
+			printf("%s || ", recvBuff);
+			//cout << recvBuff << " || " << endl;
 
-		recv(s, recvBuff, sizeof(recvBuff), 0);
-		printf("&s || ", recvBuff);
-		//cout << recvBuff << " || " << endl;
+			recv(s, recvBuff, sizeof(recvBuff), 0);
+			printf("%s || ", recvBuff);
+			//cout << recvBuff << " || " << endl;
 
-		recv(s, recvBuff, sizeof(recvBuff), 0);
-		printf("&s || ", recvBuff);
-		//cout << recvBuff << " || " << endl;
+			recv(s, recvBuff, sizeof(recvBuff), 0);
+			printf("%s || ", recvBuff);
+			//cout << recvBuff << " || " << endl;
 
-		recv(s, recvBuff, sizeof(recvBuff), 0);
-		printf("&s || \n", recvBuff);
-		//cout << recvBuff << "/n" << endl;
+			recv(s, recvBuff, sizeof(recvBuff), 0);
+			printf("%s || \n", recvBuff);
+			//cout << recvBuff << "/n" << endl;
+			recv(s, recvBuff, sizeof(recvBuff), 0);
+		}
 
 		// --------------------------------------------------------------------------------
 
@@ -325,20 +331,23 @@ void manageProdMenu(bool b) {
 		// RECEIVING response to command SHOWPRODS from the server
 
 		recv(s, recvBuff, sizeof(recvBuff), 0);
-		printf("&s || ", recvBuff);
-		//cout << recvBuff << " || " << endl;
+		while (strcmp(recvBuff, "END")) {
+			printf("%s || ", recvBuff);
+			//cout << recvBuff << " || " << endl;
 
-		recv(s, recvBuff, sizeof(recvBuff), 0);
-		printf("&s || ", recvBuff);
-		//cout << recvBuff << " || " << endl;
+			recv(s, recvBuff, sizeof(recvBuff), 0);
+			printf("%s || ", recvBuff);
+			//cout << recvBuff << " || " << endl;
 
-		recv(s, recvBuff, sizeof(recvBuff), 0);
-		printf("&s || ", recvBuff);
-		//cout << recvBuff << " || " << endl;
+			recv(s, recvBuff, sizeof(recvBuff), 0);
+			printf("%s || ", recvBuff);
+			//cout << recvBuff << " || " << endl;
 
-		recv(s, recvBuff, sizeof(recvBuff), 0);
-		printf("&s || \n", recvBuff);
-		//cout << recvBuff << "/n" << endl;
+			recv(s, recvBuff, sizeof(recvBuff), 0);
+			printf("%s || \n", recvBuff);
+			//cout << recvBuff << "/n" << endl;
+			recv(s, recvBuff, sizeof(recvBuff), 0);
+		}
 
 		// --------------------------------------------------------------------------------
 
@@ -528,6 +537,7 @@ void manageSuperMenu(bool b) {
 // EQUIVALENTE A addSupermarketDB(sql, s) --------------------------------------------------
 
 // SENDING command ADDSMKTDB
+		printf("Sending: ");
 		strcpy(sendBuff, "ADDSMKTDB");
 		send(s, sendBuff, sizeof(sendBuff), 0);
 
@@ -538,26 +548,32 @@ void manageSuperMenu(bool b) {
 		// Enviar cod_s
 		strcpy(sendBuff, cod_s);
 		send(s, sendBuff, sizeof(sendBuff), 0);
+		printf("%s ", sendBuff);
 
 		// Enviar nom_s
 		strcpy(sendBuff, nom_s);
 		send(s, sendBuff, sizeof(sendBuff), 0);
+		printf("%s ", sendBuff);
 
 		// Enviar dir_s
 		strcpy(sendBuff, dir_s);
 		send(s, sendBuff, sizeof(sendBuff), 0);
+		printf("%s ", sendBuff);
 
 		// Enviar tlf_s
 		strcpy(sendBuff, tlf_s);
 		send(s, sendBuff, sizeof(sendBuff), 0);
+		printf("%s ", sendBuff);
 
 		// Enviar metros_cuad_s
 		strcpy(sendBuff, metros_cuad_s);
 		send(s, sendBuff, sizeof(sendBuff), 0);
+		printf("%s ", sendBuff);
 
 		// Enviar cod_ciu
 		strcpy(sendBuff, cod_ciu);
 		send(s, sendBuff, sizeof(sendBuff), 0);
+		printf("%s \n", sendBuff);
 
 //		strcpy(sendBuff, "ADDSMKTDB-END");
 //		send(s, sendBuff, sizeof(sendBuff), 0);
@@ -605,30 +621,33 @@ void manageSuperMenu(bool b) {
 		strcpy(sendBuff, "SHOWSMKTS");
 		send(s, sendBuff, sizeof(sendBuff), 0);
 
-		// RECEIVING response to command SHOWSMKTS from the server
 		recv(s, recvBuff, sizeof(recvBuff), 0);
-		printf("%s || ", recvBuff);
-		//cout << recvBuff << " || " << endl;
+		while (strcmp(recvBuff, "END")) {
+			// RECEIVING response to command SHOWSMKTS from the server
+			printf("%s || ", recvBuff);
+			//cout << recvBuff << " || " << endl;
 
-		recv(s, recvBuff, sizeof(recvBuff), 0);
-		printf("%s || ", recvBuff);
-		//cout << recvBuff << " || " << endl;
+			recv(s, recvBuff, sizeof(recvBuff), 0);
+			printf("%s || ", recvBuff);
+			//cout << recvBuff << " || " << endl;
 
-		recv(s, recvBuff, sizeof(recvBuff), 0);
-		printf("%s || ", recvBuff);
-		//cout << recvBuff << " || " << endl;
+			recv(s, recvBuff, sizeof(recvBuff), 0);
+			printf("%s || ", recvBuff);
+			//cout << recvBuff << " || " << endl;
 
-		recv(s, recvBuff, sizeof(recvBuff), 0);
-		printf("%s || ", recvBuff);
-		//cout << recvBuff << " || " << endl;
+			recv(s, recvBuff, sizeof(recvBuff), 0);
+			printf("%s || ", recvBuff);
+			//cout << recvBuff << " || " << endl;
 
-		recv(s, recvBuff, sizeof(recvBuff), 0);
-		printf("%s || ", recvBuff);
-		//cout << recvBuff << " || " << endl;
+			recv(s, recvBuff, sizeof(recvBuff), 0);
+			printf("%s || ", recvBuff);
+			//cout << recvBuff << " || " << endl;
 
-		recv(s, recvBuff, sizeof(recvBuff), 0);
-		printf("%s || \n", recvBuff);
-		//cout << recvBuff << "\n" << endl;
+			recv(s, recvBuff, sizeof(recvBuff), 0);
+			printf("%s || \n", recvBuff);
+			//cout << recvBuff << "\n" << endl;
+			recv(s, recvBuff, sizeof(recvBuff), 0);
+		}
 
 		// --------------------------------------------------------------------------------
 
@@ -719,29 +738,31 @@ void manageSuperMenu(bool b) {
 
 		// RECEIVING response to command SHOWSMKTS from the server
 		recv(s, recvBuff, sizeof(recvBuff), 0);
-		printf("%s || ", recvBuff);
-		//cout << recvBuff << " || " << endl;
+		while (strcmp(recvBuff, "END")) {
+			printf("%s || ", recvBuff);
+			//cout << recvBuff << " || " << endl;
 
-		recv(s, recvBuff, sizeof(recvBuff), 0);
-		printf("%s || ", recvBuff);
-		//cout << recvBuff << " || " << endl;
+			recv(s, recvBuff, sizeof(recvBuff), 0);
+			printf("%s || ", recvBuff);
+			//cout << recvBuff << " || " << endl;
 
-		recv(s, recvBuff, sizeof(recvBuff), 0);
-		printf("%s || ", recvBuff);
-		//cout << recvBuff << " || " << endl;
+			recv(s, recvBuff, sizeof(recvBuff), 0);
+			printf("%s || ", recvBuff);
+			//cout << recvBuff << " || " << endl;
 
-		recv(s, recvBuff, sizeof(recvBuff), 0);
-		printf("%s || ", recvBuff);
-		//cout << recvBuff << " || " << endl;
+			recv(s, recvBuff, sizeof(recvBuff), 0);
+			printf("%s || ", recvBuff);
+			//cout << recvBuff << " || " << endl;
 
-		recv(s, recvBuff, sizeof(recvBuff), 0);
-		printf("%s || ", recvBuff);
-		//cout << recvBuff << " || " << endl;
+			recv(s, recvBuff, sizeof(recvBuff), 0);
+			printf("%s || ", recvBuff);
+			//cout << recvBuff << " || " << endl;
 
-		recv(s, recvBuff, sizeof(recvBuff), 0);
-		printf("%s || \n", recvBuff);
-		//cout << recvBuff << "\n" << endl;
-
+			recv(s, recvBuff, sizeof(recvBuff), 0);
+			printf("%s || \n", recvBuff);
+			//cout << recvBuff << "\n" << endl;
+			recv(s, recvBuff, sizeof(recvBuff), 0);
+		}
 		// --------------------------------------------------------------------------------
 
 		logFile(INFO, "Lista completa de supermercados mostrada");
@@ -928,30 +949,33 @@ void queryBDMenu(bool b) {
 		strcpy(sendBuff, "SHOWSMKTS");
 		send(s, sendBuff, sizeof(sendBuff), 0);
 
-		// RECEIVING response to command SHOWSMKTS from the server
 		recv(s, recvBuff, sizeof(recvBuff), 0);
-		printf("%s || ", recvBuff);
-		//cout << recvBuff << " || " << endl;
+		while (strcmp(recvBuff, "END")) {
+			// RECEIVING response to command SHOWSMKTS from the server
+			printf("%s || ", recvBuff);
+			//cout << recvBuff << " || " << endl;
 
-		recv(s, recvBuff, sizeof(recvBuff), 0);
-		printf("%s || ", recvBuff);
-		//cout << recvBuff << " || " << endl;
+			recv(s, recvBuff, sizeof(recvBuff), 0);
+			printf("%s || ", recvBuff);
+			//cout << recvBuff << " || " << endl;
 
-		recv(s, recvBuff, sizeof(recvBuff), 0);
-		printf("%s || ", recvBuff);
-		//cout << recvBuff << " || " << endl;
+			recv(s, recvBuff, sizeof(recvBuff), 0);
+			printf("%s || ", recvBuff);
+			//cout << recvBuff << " || " << endl;
 
-		recv(s, recvBuff, sizeof(recvBuff), 0);
-		printf("%s || ", recvBuff);
-		//cout << recvBuff << " || " << endl;
+			recv(s, recvBuff, sizeof(recvBuff), 0);
+			printf("%s || ", recvBuff);
+			//cout << recvBuff << " || " << endl;
 
-		recv(s, recvBuff, sizeof(recvBuff), 0);
-		printf("%s || ", recvBuff);
-		//cout << recvBuff << " || " << endl;
+			recv(s, recvBuff, sizeof(recvBuff), 0);
+			printf("%s || ", recvBuff);
+			//cout << recvBuff << " || " << endl;
 
-		recv(s, recvBuff, sizeof(recvBuff), 0);
-		printf("%s || \n", recvBuff);
-		//cout << recvBuff << "\n" << endl;
+			recv(s, recvBuff, sizeof(recvBuff), 0);
+			printf("%s || \n", recvBuff);
+			//cout << recvBuff << "\n" << endl;
+			recv(s, recvBuff, sizeof(recvBuff), 0);
+		}
 
 		// --------------------------------------------------------------------------------
 
@@ -988,20 +1012,23 @@ void queryBDMenu(bool b) {
 
 		// RECEIVING response to command SHOWPRODS from the server
 		recv(s, recvBuff, sizeof(recvBuff), 0);
-		printf("%s || ", recvBuff);
-		//cout << recvBuff << " || " << endl;
+		while (strcmp(recvBuff, "END")) {
+			printf("%s || ", recvBuff);
+			//cout << recvBuff << " || " << endl;
 
-		recv(s, recvBuff, sizeof(recvBuff), 0);
-		printf("%s || ", recvBuff);
-		//cout << recvBuff << " || " << endl;
+			recv(s, recvBuff, sizeof(recvBuff), 0);
+			printf("%s || ", recvBuff);
+			//cout << recvBuff << " || " << endl;
 
-		recv(s, recvBuff, sizeof(recvBuff), 0);
-		printf("%s || ", recvBuff);
-		//cout << recvBuff << " || " << endl;
+			recv(s, recvBuff, sizeof(recvBuff), 0);
+			printf("%s || ", recvBuff);
+			//cout << recvBuff << " || " << endl;
 
-		recv(s, recvBuff, sizeof(recvBuff), 0);
-		printf("%s || \n", recvBuff);
-		//cout << recvBuff << "/n" << endl;
+			recv(s, recvBuff, sizeof(recvBuff), 0);
+			printf("%s || \n", recvBuff);
+			//cout << recvBuff << "/n" << endl;
+			recv(s, recvBuff, sizeof(recvBuff), 0);
+		}
 
 		// --------------------------------------------------------------------------------
 
