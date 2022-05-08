@@ -4,8 +4,17 @@ Fichero log - DEUSTOMARKET
 
 [INFO]   Propiedades cargadas con éxito
 [INFO]   Propiedades cargadas con éxito
-[INFO]   Opción 2 de mainMenu seleccionada (>>adminMenu)
-[INFO]   Contraseña de administrador correcta (>>adminMenu)
-[INFO]   Opción 1 de adminMenu seleccionada (>>updateBDMenu)
-[INFO]   Opción 1 de updateBDMenu seleccionada (>>manageSuperMenu)
-[INFO]   Opción 1 de manageSuperMenu seleccionada (addSupermarket)
+[INFO]   Opción 1 de mainMenu seleccionada (>>userMenu)
+[INFO]   Opción 1 de userMenu seleccionada (>>queryBDMenu)
+[INFO]   Opción 1 de queryBDMenu seleccionada (showSupermarkets)
+[INFO]   Lista completa de supermercados mostrada
+[INFO]   mainMenu<<
+[INFO]   Propiedades cargadas con éxito
+[INFO]   Opción 1 de mainMenu seleccionada (>>userMenu)
+[INFO]   Opción 1 de userMenu seleccionada (>>queryBDMenu)
+[INFO]   Opción 2 de queryBDMenu seleccionada (showProducts)
+[INFO]   Lista completa de productos mostrada
+[INFO]   mainMenu<<
+[INFO]   Propiedades cargadas con éxito
+
+FINAL DEL ARCHIVO

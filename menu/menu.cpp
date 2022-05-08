@@ -113,13 +113,14 @@ void manageProdMenu(bool b) {
 
 		// RECEIVING response to command SHOWPRODSPK from the server
 		recv(s, recvBuff, sizeof(recvBuff), 0);
+
 		while (strcmp(recvBuff, "END")) {
 			printf("%s\n", recvBuff);
 			recv(s, recvBuff, sizeof(recvBuff), 0);
 		}
 		//cout << recvBuff << "/n" << endl;
 
-		// --------------------------------------------------------------------------------
+		// ----------------------------------------------------------------------------------------------------
 
 		logFile(INFO, "Códigos de productos mostrados");
 
@@ -147,9 +148,9 @@ void manageProdMenu(bool b) {
 		fflush(stdin);
 		sscanf(desc_prod, "%s", desc_prod);
 
-// EQUIVALENTE A addProductDB(sql, p) --------------------------------------------------
+		// EQUIVALENTE A addProductDB(sql, p) --------------------------------------------------
 
-// SENDING command ADDPRODDB
+		// SENDING command ADDPRODDB
 		strcpy(sendBuff, "ADDPRODDB");
 		send(s, sendBuff, sizeof(sendBuff), 0);
 
@@ -180,7 +181,7 @@ void manageProdMenu(bool b) {
 //		recv(s, recvBuff, sizeof(recvBuff), 0);
 //		cout << " " << endl;
 
-// --------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------
 
 		printf("\n¡Producto añadido con éxito! Pulse ENTER para continuar: ");
 		fflush(stdout);
@@ -220,6 +221,7 @@ void manageProdMenu(bool b) {
 
 		// RECEIVING response to command SHOWPRODS from the server
 		recv(s, recvBuff, sizeof(recvBuff), 0);
+
 		while (strcmp(recvBuff, "END")) {
 			printf("%s || ", recvBuff);
 			//cout << recvBuff << " || " << endl;
@@ -233,12 +235,13 @@ void manageProdMenu(bool b) {
 			//cout << recvBuff << " || " << endl;
 
 			recv(s, recvBuff, sizeof(recvBuff), 0);
-			printf("%s || \n", recvBuff);
+			printf("%s\n", recvBuff);
 			//cout << recvBuff << "/n" << endl;
+
 			recv(s, recvBuff, sizeof(recvBuff), 0);
 		}
 
-		// --------------------------------------------------------------------------------
+		// ----------------------------------------------------------------------------------------------------
 
 		logFile(INFO, "Lista completa de productos mostrada");
 
@@ -286,7 +289,7 @@ void manageProdMenu(bool b) {
 //			recv(s, recvBuff, sizeof(recvBuff), 0);
 //			cout << " " << endl;
 
-// --------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------
 
 			printf(
 					"\n¡Producto eliminado correctamente! Pulse ENTER para continuar: ");
@@ -329,8 +332,8 @@ void manageProdMenu(bool b) {
 		send(s, sendBuff, sizeof(sendBuff), 0);
 
 		// RECEIVING response to command SHOWPRODS from the server
-
 		recv(s, recvBuff, sizeof(recvBuff), 0);
+
 		while (strcmp(recvBuff, "END")) {
 			printf("%s || ", recvBuff);
 			//cout << recvBuff << " || " << endl;
@@ -344,8 +347,9 @@ void manageProdMenu(bool b) {
 			//cout << recvBuff << " || " << endl;
 
 			recv(s, recvBuff, sizeof(recvBuff), 0);
-			printf("%s || \n", recvBuff);
+			printf("%s\n", recvBuff);
 			//cout << recvBuff << "/n" << endl;
+
 			recv(s, recvBuff, sizeof(recvBuff), 0);
 		}
 
@@ -387,9 +391,9 @@ void manageProdMenu(bool b) {
 		fflush(stdin);
 		sscanf(desc_prod, "%s", desc_prod);
 
-// EQUIVALENTE A updateProductDB(sql, p) --------------------------------------------------
+		// EQUIVALENTE A updateProductDB(sql, p) --------------------------------------------------
 
-// SENDING command UDPRODDB
+		// SENDING command UDPRODDB
 		strcpy(sendBuff, "UDPRODDB");
 		send(s, sendBuff, sizeof(sendBuff), 0);
 
@@ -419,6 +423,8 @@ void manageProdMenu(bool b) {
 //		// RECEIVING response to command UDPRODDB from the server
 //		recv(s, recvBuff, sizeof(recvBuff), 0);
 //		cout << " " << endl;
+
+// ----------------------------------------------------------------------------------------------------
 
 		printf(
 				"\n¡Supermercado actualizado correctamente! Pulse ENTER para continuar: ");
@@ -488,13 +494,14 @@ void manageSuperMenu(bool b) {
 
 		// RECEIVING response to command SHOWSMKTSPK from the server
 		recv(s, recvBuff, sizeof(recvBuff), 0);
+
 		while (strcmp(recvBuff, "END") != 0) {
 			printf("%s\n", recvBuff);
 			recv(s, recvBuff, sizeof(recvBuff), 0);
 			//cout << recvBuff << "/n" << endl;
 		}
 
-		// --------------------------------------------------------------------------------
+		// ----------------------------------------------------------------------------------------------------
 
 		logFile(INFO, "Códigos de supermercados mostrados");
 
@@ -534,46 +541,47 @@ void manageSuperMenu(bool b) {
 		fflush(stdin);
 		sscanf(cod_ciu, "%s", cod_ciu);
 
-// EQUIVALENTE A addSupermarketDB(sql, s) --------------------------------------------------
+		// EQUIVALENTE A addSupermarketDB(sql, s) --------------------------------------------------
 
-// SENDING command ADDSMKTDB
-		printf("Sending: ");
+		// SENDING command ADDSMKTDB
 		strcpy(sendBuff, "ADDSMKTDB");
 		send(s, sendBuff, sizeof(sendBuff), 0);
+		printf("%s ", sendBuff); // Comp.
 
 		// Enviar sql
 		strcpy(sendBuff, sql);
 		send(s, sendBuff, sizeof(sendBuff), 0);
+		printf("%s ", sendBuff); // Comp.
 
 		// Enviar cod_s
 		strcpy(sendBuff, cod_s);
 		send(s, sendBuff, sizeof(sendBuff), 0);
-		printf("%s ", sendBuff);
+		printf("%s ", sendBuff); // Comp.
 
 		// Enviar nom_s
 		strcpy(sendBuff, nom_s);
 		send(s, sendBuff, sizeof(sendBuff), 0);
-		printf("%s ", sendBuff);
+		printf("%s ", sendBuff); // Comp.
 
 		// Enviar dir_s
 		strcpy(sendBuff, dir_s);
 		send(s, sendBuff, sizeof(sendBuff), 0);
-		printf("%s ", sendBuff);
+		printf("%s ", sendBuff); // Comp.
 
 		// Enviar tlf_s
 		strcpy(sendBuff, tlf_s);
 		send(s, sendBuff, sizeof(sendBuff), 0);
-		printf("%s ", sendBuff);
+		printf("%s ", sendBuff); // Comp.
 
 		// Enviar metros_cuad_s
 		strcpy(sendBuff, metros_cuad_s);
 		send(s, sendBuff, sizeof(sendBuff), 0);
-		printf("%s ", sendBuff);
+		printf("%s ", sendBuff); // Comp.
 
 		// Enviar cod_ciu
 		strcpy(sendBuff, cod_ciu);
 		send(s, sendBuff, sizeof(sendBuff), 0);
-		printf("%s \n", sendBuff);
+		printf("%s \n", sendBuff); // Comp.
 
 //		strcpy(sendBuff, "ADDSMKTDB-END");
 //		send(s, sendBuff, sizeof(sendBuff), 0);
@@ -582,7 +590,7 @@ void manageSuperMenu(bool b) {
 //		recv(s, recvBuff, sizeof(recvBuff), 0);
 //		cout << " " << endl;
 
-// --------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------
 
 		printf(
 				"\n¡Supermercado añadido con éxito! Pulse ENTER para continuar: ");
@@ -621,9 +629,10 @@ void manageSuperMenu(bool b) {
 		strcpy(sendBuff, "SHOWSMKTS");
 		send(s, sendBuff, sizeof(sendBuff), 0);
 
+		// RECEIVING response to command SHOWSMKTS from the server
 		recv(s, recvBuff, sizeof(recvBuff), 0);
+
 		while (strcmp(recvBuff, "END")) {
-			// RECEIVING response to command SHOWSMKTS from the server
 			printf("%s || ", recvBuff);
 			//cout << recvBuff << " || " << endl;
 
@@ -644,12 +653,13 @@ void manageSuperMenu(bool b) {
 			//cout << recvBuff << " || " << endl;
 
 			recv(s, recvBuff, sizeof(recvBuff), 0);
-			printf("%s || \n", recvBuff);
+			printf("%s\n", recvBuff);
 			//cout << recvBuff << "\n" << endl;
+
 			recv(s, recvBuff, sizeof(recvBuff), 0);
 		}
 
-		// --------------------------------------------------------------------------------
+		// ----------------------------------------------------------------------------------------------------
 
 		logFile(INFO, "Lista completa de supermercados mostrada");
 
@@ -698,7 +708,7 @@ void manageSuperMenu(bool b) {
 //			recv(s, recvBuff, sizeof(recvBuff), 0);
 //			cout << " " << endl;
 
-// --------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------
 
 			printf(
 					"\n¡Supermercado eliminado correctamente! Pulse ENTER para continuar: ");
@@ -738,6 +748,7 @@ void manageSuperMenu(bool b) {
 
 		// RECEIVING response to command SHOWSMKTS from the server
 		recv(s, recvBuff, sizeof(recvBuff), 0);
+
 		while (strcmp(recvBuff, "END")) {
 			printf("%s || ", recvBuff);
 			//cout << recvBuff << " || " << endl;
@@ -759,11 +770,12 @@ void manageSuperMenu(bool b) {
 			//cout << recvBuff << " || " << endl;
 
 			recv(s, recvBuff, sizeof(recvBuff), 0);
-			printf("%s || \n", recvBuff);
+			printf("%s\n", recvBuff);
 			//cout << recvBuff << "\n" << endl;
 			recv(s, recvBuff, sizeof(recvBuff), 0);
 		}
-		// --------------------------------------------------------------------------------
+
+		// ----------------------------------------------------------------------------------------------------
 
 		logFile(INFO, "Lista completa de supermercados mostrada");
 
@@ -813,9 +825,9 @@ void manageSuperMenu(bool b) {
 		fflush(stdin);
 		sscanf(cod_ciu, "%s", cod_ciu);
 
-// EQUIVALENTE A updateSupermarketDB(sql, s) --------------------------------------------------
+		// EQUIVALENTE A updateSupermarketDB(sql, s) --------------------------------------------------
 
-// SENDING command UDSMKTDB
+		// SENDING command UDSMKTDB
 		strcpy(sendBuff, "UDSMKTDB");
 		send(s, sendBuff, sizeof(sendBuff), 0);
 
@@ -854,7 +866,7 @@ void manageSuperMenu(bool b) {
 //		recv(s, recvBuff, sizeof(recvBuff), 0);
 //		cout << " " << endl;
 
-// --------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------
 
 		printf(
 				"\n¡Supermercado actualizado correctamente! Pulse ENTER para continuar: ");
@@ -949,9 +961,10 @@ void queryBDMenu(bool b) {
 		strcpy(sendBuff, "SHOWSMKTS");
 		send(s, sendBuff, sizeof(sendBuff), 0);
 
+		// RECEIVING response to command SHOWSMKTS from the server
 		recv(s, recvBuff, sizeof(recvBuff), 0);
+
 		while (strcmp(recvBuff, "END")) {
-			// RECEIVING response to command SHOWSMKTS from the server
 			printf("%s || ", recvBuff);
 			//cout << recvBuff << " || " << endl;
 
@@ -972,7 +985,7 @@ void queryBDMenu(bool b) {
 			//cout << recvBuff << " || " << endl;
 
 			recv(s, recvBuff, sizeof(recvBuff), 0);
-			printf("%s || \n", recvBuff);
+			printf("%s\n", recvBuff);
 			//cout << recvBuff << "\n" << endl;
 			recv(s, recvBuff, sizeof(recvBuff), 0);
 		}
@@ -1012,6 +1025,7 @@ void queryBDMenu(bool b) {
 
 		// RECEIVING response to command SHOWPRODS from the server
 		recv(s, recvBuff, sizeof(recvBuff), 0);
+
 		while (strcmp(recvBuff, "END")) {
 			printf("%s || ", recvBuff);
 			//cout << recvBuff << " || " << endl;
@@ -1025,8 +1039,9 @@ void queryBDMenu(bool b) {
 			//cout << recvBuff << " || " << endl;
 
 			recv(s, recvBuff, sizeof(recvBuff), 0);
-			printf("%s || \n", recvBuff);
+			printf("%s\n", recvBuff);
 			//cout << recvBuff << "/n" << endl;
+
 			recv(s, recvBuff, sizeof(recvBuff), 0);
 		}
 
@@ -1097,11 +1112,12 @@ void adminMenu() {
 		// RECEIVING response to command SHOWSTATS from the server
 		recv(s, recvBuff, sizeof(recvBuff), 0);
 		printf("Media de los precios de los productos: %s\n", recvBuff);
-		//cout << "Media de los precios de los productos: " << recvBuff << endl;
+//		cout << "Media de los precios de los productos: " << recvBuff << endl;
 
 		recv(s, recvBuff, sizeof(recvBuff), 0);
 		printf("Media de los metros cuadrados de los supermercados: %s\n",
 				recvBuff);
+//		cout << "Media de los metros cuadrados de los supermercados: " << recvBuff << endl;
 
 		logFile(INFO, "Estadísticas mostradas");
 
@@ -1162,13 +1178,12 @@ void userMenu() {
 		// RECEIVING response to command SHOWSTATS from the server
 		recv(s, recvBuff, sizeof(recvBuff), 0);
 		printf("Media de los precios de los productos: %s\n", recvBuff);
-		//cout << "Media de los precios de los productos: " << recvBuff << endl;
+//		cout << "Media de los precios de los productos: " << recvBuff << endl;
 
 		recv(s, recvBuff, sizeof(recvBuff), 0);
 		printf("Media de los metros cuadrados de los supermercados: %s\n",
 				recvBuff);
-		//cout << "Media de los metros cuadrados de los supermercados: "
-		//<< recvBuff << endl;
+//		cout << "Media de los metros cuadrados de los supermercados: " << recvBuff << endl;
 
 		logFile(INFO, "Estadísticas mostradas");
 
