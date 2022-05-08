@@ -96,10 +96,6 @@ void manageProdMenu(bool b) {
 	case 1:
 		logFile(INFO, "Opción 1 de manageProdMenu seleccionada (addProduct)");
 
-		{
-			sql = "INSERT INTO PRODUCTO VALUES (?, ?, ?, ?)";
-		}
-
 		printf("\n---------------\n");
 		printf("AÑADIR PRODUCTO\n");
 		printf("---------------\n\n");
@@ -154,33 +150,27 @@ void manageProdMenu(bool b) {
 		// SENDING command ADDPRODDB
 		strcpy(sendBuff, "ADDPRODDB");
 		send(s, sendBuff, sizeof(sendBuff), 0);
-
-		// Enviar sql
-		strcpy(sendBuff, sql);
-		send(s, sendBuff, sizeof(sendBuff), 0);
+		printf("%s ", sendBuff); // Comp.
 
 		// Enviar id_prod
 		strcpy(sendBuff, id_prod);
 		send(s, sendBuff, sizeof(sendBuff), 0);
+		printf("%s ", sendBuff); // Comp.
 
 		// Enviar nom_prod
 		strcpy(sendBuff, nom_prod);
 		send(s, sendBuff, sizeof(sendBuff), 0);
+		printf("%s ", sendBuff); // Comp.
 
 		// Enviar precio_prod
 		strcpy(sendBuff, precio_prod);
 		send(s, sendBuff, sizeof(sendBuff), 0);
+		printf("%s ", sendBuff); // Comp.
 
 		// Enviar desc_prod
 		strcpy(sendBuff, desc_prod);
 		send(s, sendBuff, sizeof(sendBuff), 0);
-
-//		strcpy(sendBuff, "ADDPRODDB-END");
-//		send(s, sendBuff, sizeof(sendBuff), 0);
-
-//		// RECEIVING response to command ADDPRODDB from the server
-//		recv(s, recvBuff, sizeof(recvBuff), 0);
-//		cout << " " << endl;
+		printf("%s\n", sendBuff); // Comp.
 
 // ----------------------------------------------------------------------------------------------------
 
@@ -196,11 +186,6 @@ void manageProdMenu(bool b) {
 	case 2:
 		logFile(INFO,
 				"Opción 2 de manageProdMenu seleccionada (deleteProduct)");
-
-		{
-			sql = "DELETE FROM PRODUCTO WHERE ID_PROD = ?;";
-			char opt;
-		}
 
 		printf("\n-----------------\n");
 		printf("ELIMINAR PRODUCTO\n");
@@ -274,21 +259,12 @@ void manageProdMenu(bool b) {
 			// SENDING command DELPRODDB
 			strcpy(sendBuff, "DELPRODDB");
 			send(s, sendBuff, sizeof(sendBuff), 0);
-
-			// Enviar sql
-			strcpy(sendBuff, sql);
-			send(s, sendBuff, sizeof(sendBuff), 0);
+			printf("%s ", sendBuff);
 
 			// Enviar id_prod
 			strcpy(sendBuff, id_prod);
 			send(s, sendBuff, sizeof(sendBuff), 0);
-
-//			strcpy(sendBuff, "DELPRODDB-END");
-//			send(s, sendBuff, sizeof(sendBuff), 0);
-
-//			// RECEIVING response to command DELPRODDB from the server
-//			recv(s, recvBuff, sizeof(recvBuff), 0);
-//			cout << " " << endl;
+			printf("%s\n", sendBuff);
 
 // ----------------------------------------------------------------------------------------------------
 
@@ -308,11 +284,6 @@ void manageProdMenu(bool b) {
 	case 3:
 		logFile(INFO,
 				"Opción 3 de manageProdMenu seleccionada (updateProduct)");
-
-		{
-			sql =
-					"UPDATE PRODUCTO SET NOM_PROD = ?, PRECIO_PROD = ?, DESC_PROD = ? WHERE ID_PROD = ?";
-		}
 
 		printf("\n-------------------\n");
 		printf("ACTUALIZAR PRODUCTO\n");
@@ -397,33 +368,27 @@ void manageProdMenu(bool b) {
 		// SENDING command UDPRODDB
 		strcpy(sendBuff, "UDPRODDB");
 		send(s, sendBuff, sizeof(sendBuff), 0);
-
-		// Enviar sql
-		strcpy(sendBuff, sql);
-		send(s, sendBuff, sizeof(sendBuff), 0);
+		printf("%s ", sendBuff);
 
 		// Enviar id_prod
 		strcpy(sendBuff, id_prod);
 		send(s, sendBuff, sizeof(sendBuff), 0);
+		printf("%s ", sendBuff);
 
 		// Enviar nom_prod
 		strcpy(sendBuff, nom_prod);
 		send(s, sendBuff, sizeof(sendBuff), 0);
+		printf("%s ", sendBuff);
 
 		// Enviar precio_prod
 		strcpy(sendBuff, precio_prod);
 		send(s, sendBuff, sizeof(sendBuff), 0);
+		printf("%s ", sendBuff);
 
 		// Enviar desc_prod
 		strcpy(sendBuff, desc_prod);
 		send(s, sendBuff, sizeof(sendBuff), 0);
-
-//		strcpy(sendBuff, "UDPRODDB-END");
-//		send(s, sendBuff, sizeof(sendBuff), 0);
-//
-//		// RECEIVING response to command UDPRODDB from the server
-//		recv(s, recvBuff, sizeof(recvBuff), 0);
-//		cout << " " << endl;
+		printf("%s\n", sendBuff);
 
 // ----------------------------------------------------------------------------------------------------
 
@@ -477,9 +442,6 @@ void manageSuperMenu(bool b) {
 	case 1:
 		logFile(INFO,
 				"Opción 1 de manageSuperMenu seleccionada (addSupermarket)");
-//		{
-//			sql = "INSERT INTO SUPERMERCADO VALUES (?, ?, ?, ?, ?, ?);";
-//		}
 
 		printf("\n-------------------\n");
 		printf("AÑADIR SUPERMERCADO\n");
@@ -577,14 +539,7 @@ void manageSuperMenu(bool b) {
 		// Enviar cod_ciu
 		strcpy(sendBuff, cod_ciu);
 		send(s, sendBuff, sizeof(sendBuff), 0);
-		printf("%s \n", sendBuff); // Comp.
-
-//		strcpy(sendBuff, "ADDSMKTDB-END");
-//		send(s, sendBuff, sizeof(sendBuff), 0);
-
-//		// RECEIVING response to command ADDSMKTDB from the server
-//		recv(s, recvBuff, sizeof(recvBuff), 0);
-//		cout << " " << endl;
+		printf("%s\n", sendBuff); // Comp.
 
 // ----------------------------------------------------------------------------------------------------
 
@@ -601,10 +556,6 @@ void manageSuperMenu(bool b) {
 	case 2:
 		logFile(INFO,
 				"Opción 2 de manageSuperMenu seleccionada (deleteSupermarket)");
-
-		{
-			sql = "DELETE FROM SUPERMERCADO WHERE COD_S = ?;";
-		}
 
 		printf("\n---------------------\n");
 		printf("ELIMINAR SUPERMERCADO\n");
@@ -688,21 +639,12 @@ void manageSuperMenu(bool b) {
 			// SENDING command DELSMKTDB
 			strcpy(sendBuff, "DELSMKTDB");
 			send(s, sendBuff, sizeof(sendBuff), 0);
-
-			// Enviar sql
-			strcpy(sendBuff, sql);
-			send(s, sendBuff, sizeof(sendBuff), 0);
+			printf("%s ", sendBuff); // Comp.
 
 			// Enviar cod_s
 			strcpy(sendBuff, cod_s);
 			send(s, sendBuff, sizeof(sendBuff), 0);
-
-//			strcpy(sendBuff, "DELSMKTDB-END");
-//			send(s, sendBuff, sizeof(sendBuff), 0);
-
-//			// RECEIVING response to command DELSMKTDB from the server
-//			recv(s, recvBuff, sizeof(recvBuff), 0);
-//			cout << " " << endl;
+			printf("%s\n", sendBuff); // Comp.
 
 // ----------------------------------------------------------------------------------------------------
 
@@ -826,41 +768,37 @@ void manageSuperMenu(bool b) {
 		// SENDING command UDSMKTDB
 		strcpy(sendBuff, "UDSMKTDB");
 		send(s, sendBuff, sizeof(sendBuff), 0);
-
-		// Enviar sql
-		strcpy(sendBuff, sql);
-		send(s, sendBuff, sizeof(sendBuff), 0);
+		printf("%s ", sendBuff);
 
 		// Enviar cod_s
 		strcpy(sendBuff, cod_s);
 		send(s, sendBuff, sizeof(sendBuff), 0);
+		printf("%s ", sendBuff);
 
 		// Enviar nom_s
 		strcpy(sendBuff, nom_s);
 		send(s, sendBuff, sizeof(sendBuff), 0);
+		printf("%s ", sendBuff);
 
 		// Enviar dir_s
 		strcpy(sendBuff, dir_s);
 		send(s, sendBuff, sizeof(sendBuff), 0);
+		printf("%s ", sendBuff);
 
 		// Enviar tlf_s
 		strcpy(sendBuff, tlf_s);
 		send(s, sendBuff, sizeof(sendBuff), 0);
+		printf("%s ", sendBuff);
 
 		// Enviar metros_cuad_s
 		strcpy(sendBuff, metros_cuad_s);
 		send(s, sendBuff, sizeof(sendBuff), 0);
+		printf("%s ", sendBuff);
 
 		// Enviar cod_ciu
 		strcpy(sendBuff, cod_ciu);
 		send(s, sendBuff, sizeof(sendBuff), 0);
-
-//		strcpy(sendBuff, "UDSMKTDB-END");
-//		send(s, sendBuff, sizeof(sendBuff), 0);
-//
-//		// RECEIVING response to command UDSMKTDB from the server
-//		recv(s, recvBuff, sizeof(recvBuff), 0);
-//		cout << " " << endl;
+		printf("%s\n", sendBuff);
 
 // ----------------------------------------------------------------------------------------------------
 
