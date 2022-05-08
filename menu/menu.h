@@ -4,10 +4,10 @@
  *  Created on: 1 abr. 2022
  *      Author: Iker López
  */
-
-#ifndef MENU_MENU_H_
-#define MENU_MENU_H_
 #include <stdbool.h>
+
+#ifndef MENU_H_
+#define MENU_H_
 
 int prepareSocket();
 void mainMenu(bool b);
@@ -19,4 +19,4 @@ void updateBDMenu();
 void manageSuperMenu(bool b); // Se ha añadido el argumento bool b
 void manageProdMenu(bool b); // Se ha añadido el argumento bool b
 
-#endif /* MENU_MENU_H_ */
+#endif /* MENU_H_ */

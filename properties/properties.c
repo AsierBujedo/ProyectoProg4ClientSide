@@ -6,11 +6,10 @@
  */
 
 #include "properties.h"
-
+#include "../logger/logger.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "../logger/logger.h"
 
 #define MAX 1000
 

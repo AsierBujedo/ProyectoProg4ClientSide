@@ -6,12 +6,11 @@
  */
 
 #include "menu/menu.h"
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
 #include "logger/logger.h"
 #include "properties/properties.h"
-
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 int main() {
 	openLogger("marketlog.log");

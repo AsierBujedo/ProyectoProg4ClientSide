@@ -5,8 +5,8 @@
  *      Author: asier
  */
 
-#ifndef PROPERTIES_PROPERTIES_H_
-#define PROPERTIES_PROPERTIES_H_
+#ifndef PROPERTIES_H_
+#define PROPERTIES_H_
 
 typedef struct {
 	int numProp;
@@ -17,4 +17,4 @@ typedef struct {
 void loadProperties(Properties* properties, char name[]);
 void createProperties(Properties* properties, char name[]);
 
-#endif /* PROPERTIES_PROPERTIES_H_ */
+#endif /* PROPERTIES_H_ */
