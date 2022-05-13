@@ -5,7 +5,7 @@
  *      Author: asier
  */
 
-#include "Supermercado.h"
+#include "../clases/Supermercado.h"
 
 Supermercado::Supermercado(int cod_s, char* nom_s, char* dir_s, int tlf_s, double metros_cuad_s, int cod_ciu) {
 	this->cod_s = cod_s;

@@ -5,7 +5,7 @@
  *      Author: asier
  */
 
-#include "Producto.h"
+#include "../clases/Producto.h"
 
 Producto::Producto(int id_prod, char* nom_prod, double precio_prod, char* desc_prod) {
 	this->id_prod = id_prod;

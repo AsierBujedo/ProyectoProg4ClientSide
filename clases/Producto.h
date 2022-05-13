@@ -5,8 +5,8 @@
  *      Author: asier
  */
 
-#ifndef LIB_PRODUCTO_H_
-#define LIB_PRODUCTO_H_
+#ifndef CLASES_PRODUCTO_H_
+#define CLASES_PRODUCTO_H_
 
 class Producto {
 public:
@@ -27,4 +27,4 @@ public:
 	void setDesc(char* desc);
 };
 
-#endif /* LIB_PRODUCTO_H_ */
+#endif /* CLASES_PRODUCTO_H_ */

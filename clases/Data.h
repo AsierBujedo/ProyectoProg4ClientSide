@@ -5,11 +5,11 @@
  *      Author: asier
  */
 
-#ifndef LIB_DATA_H_
-#define LIB_DATA_H_
+#ifndef CLASES_DATA_H_
+#define CLASES_DATA_H_
 
-#include "Producto.h"
-#include "Supermercado.h"
+#include "../clases/Producto.h"
+#include "../clases/Supermercado.h"
 
 class Data {
 	Producto* productos;
@@ -30,4 +30,4 @@ public:
 
 };
 
-#endif /* LIB_DATA_H_ */
+#endif /* CLASES_DATA_H_ */

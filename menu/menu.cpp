@@ -15,7 +15,7 @@ extern "C" {
 #include <winsock2.h>
 }
 
-#include "lib/Producto.h"
+#include "../clases/Data.h"
 #include <iostream>
 
 #define MAX_LINE 40

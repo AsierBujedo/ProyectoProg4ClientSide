@@ -5,7 +5,7 @@
  *      Author: asier
  */
 
-#include "Data.h"
+#include "../clases/Data.h"
 
 Data::Data() {
 }

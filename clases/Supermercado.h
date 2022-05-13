@@ -5,8 +5,8 @@
  *      Author: asier
  */
 
-#ifndef LIB_SUPERMERCADO_H_
-#define LIB_SUPERMERCADO_H_
+#ifndef CLASES_SUPERMERCADO_H_
+#define CLASES_SUPERMERCADO_H_
 
 class Supermercado {
 public:
@@ -34,4 +34,4 @@ public:
 
 };
 
-#endif /* LIB_SUPERMERCADO_H_ */
+#endif /* CLASES_SUPERMERCADO_H_ */
