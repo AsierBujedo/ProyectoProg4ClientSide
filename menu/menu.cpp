@@ -15,6 +15,7 @@ extern "C" {
 #include <winsock2.h>
 }
 
+#include "lib/Producto.h"
 #include <iostream>
 
 #define MAX_LINE 40
@@ -172,6 +173,7 @@ void manageProdMenu(bool b) {
 		send(s, sendBuff, sizeof(sendBuff), 0);
 		printf("%s\n", sendBuff); // Comp.
 
+
 // ----------------------------------------------------------------------------------------------------
 
 		printf("\n¡Producto añadido con éxito! Pulse ENTER para continuar: ");
@@ -267,7 +269,6 @@ void manageProdMenu(bool b) {
 			printf("%s\n", sendBuff);
 
 // ----------------------------------------------------------------------------------------------------
-
 			printf(
 					"\n¡Producto eliminado correctamente! Pulse ENTER para continuar: ");
 			fflush(stdout);
@@ -1209,6 +1210,7 @@ void mainMenu(bool b) {
 	case 3:
 		logFile(END,
 				"Opción 3 de mainMenu seleccionada (ejecución finalizada)");
+		closesocket(s);
 		exit(0);
 	}
 
