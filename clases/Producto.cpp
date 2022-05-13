@@ -19,34 +19,35 @@ Producto::~Producto() {
 	delete this->desc_prod;
 }
 
-int Producto::getID() {
-	return this->id_prod;
+char* Producto::getDescProd() const {
+	return desc_prod;
 }
 
-void Producto::setID(int id) {
-	this->id_prod = id;
+void Producto::setDescProd(char *descProd) {
+	desc_prod = descProd;
 }
 
-char* Producto::getName() {
-	return this->nom_prod;
+int Producto::getIdProd() const {
+	return id_prod;
 }
 
-void Producto::setName(char* name) {
-	this->nom_prod = name;
+void Producto::setIdProd(int idProd) {
+	id_prod = idProd;
 }
 
-double Producto::getPrecio() {
-	return this->precio_prod;
+char* Producto::getNomProd() const {
+	return nom_prod;
 }
 
-void Producto::setPrecio(double precio) {
-	this->precio_prod = precio;
+void Producto::setNomProd(char *nomProd) {
+	nom_prod = nomProd;
 }
 
-char* Producto::getDesc() {
-	return this->desc_prod;
+double Producto::getPrecioProd() const {
+	return precio_prod;
 }
 
-void Producto::setDesc(char* desc) {
-	this->desc_prod = desc;
+void Producto::setPrecioProd(double precioProd) {
+	precio_prod = precioProd;
 }
+

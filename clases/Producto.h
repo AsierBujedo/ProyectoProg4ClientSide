@@ -17,14 +17,14 @@ public:
 public:
 	Producto(int id_prod, char* nom_prod, double precio_prod, char* desc_prod);
 	virtual ~Producto();
-	int getID();
-	void setID(int id);
-	char* getName();
-	void setName(char* name);
-	double getPrecio();
-	void setPrecio(double precio);
-	char* getDesc();
-	void setDesc(char* desc);
+	char* getDescProd() const;
+	void setDescProd(char *descProd);
+	int getIdProd() const;
+	void setIdProd(int idProd);
+	char* getNomProd() const;
+	void setNomProd(char *nomProd);
+	double getPrecioProd() const;
+	void setPrecioProd(double precioProd);
 };
 
 #endif /* CLASES_PRODUCTO_H_ */

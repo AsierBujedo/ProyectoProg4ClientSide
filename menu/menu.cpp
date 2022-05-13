@@ -269,6 +269,7 @@ void manageProdMenu(bool b) {
 			printf("%s\n", sendBuff);
 
 // ----------------------------------------------------------------------------------------------------
+
 			printf(
 					"\n¡Producto eliminado correctamente! Pulse ENTER para continuar: ");
 			fflush(stdout);
@@ -1103,8 +1104,6 @@ void userMenu() {
 		printf("\n------------\n");
 		printf("ESTADÍSTICAS\n");
 		printf("------------\n\n");
-
-		//fflush(stdout);
 
 		// SENDING command SHOWSTATS
 		strcpy(sendBuff, "SHOWSTATS");

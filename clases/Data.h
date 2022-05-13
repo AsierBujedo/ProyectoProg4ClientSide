@@ -19,15 +19,14 @@ class Data {
 public:
 	Data();
 	virtual ~Data();
-	Producto* getArrayP();
-	void setArrayP(Producto* prods);
-	Supermercado* getArrayS();
-	void setArrayS(Supermercado* smkts);
-	int getNumProds();
-	void setNumProds(int num);
-	int getNumSmkts();
-	void setNumSmkts(int num);
-
+	int getNumProds() const;
+	void setNumProds(int numProds);
+	int getNumSmkts() const;
+	void setNumSmkts(int numSmkts);
+	Producto*& getProductos();
+	void setProductos(Producto *&productos);
+	Supermercado*& getSupermercados();
+	void setSupermercados(Supermercado *&supermercados);
 };
 
 #endif /* CLASES_DATA_H_ */

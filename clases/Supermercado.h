@@ -31,7 +31,6 @@ public:
 	void setNomS(char *nomS);
 	int getTlfS() const;
 	void setTlfS(int tlfS);
-
 };
 
 #endif /* CLASES_SUPERMERCADO_H_ */

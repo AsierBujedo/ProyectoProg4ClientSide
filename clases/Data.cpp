@@ -15,29 +15,34 @@ Data::~Data() {
 	delete this->supermercados;
 }
 
-Producto* Data::getArrayP() {
-	return this->productos;
-}
-void Data::setArrayP(Producto* prods) {
-	this->productos =  prods;
-}
-Supermercado* Data::getArrayS() {
-	return this->supermercados;
-}
-void Data::setArrayS(Supermercado* smkts) {
-	this->supermercados = smkts;
+int Data::getNumProds() const {
+	return num_prods;
 }
 
-int Data::getNumProds() {
-	return this->num_prods;
-}
-void Data::setNumProds(int num) {
-	this->num_prods = num;
-}
-int Data::getNumSmkts() {
-	return this->num_smkts;
-}
-void Data::setNumSmkts(int num) {
-	this->num_smkts = num;
+void Data::setNumProds(int numProds) {
+	num_prods = numProds;
 }
 
+int Data::getNumSmkts() const {
+	return num_smkts;
+}
+
+void Data::setNumSmkts(int numSmkts) {
+	num_smkts = numSmkts;
+}
+
+Producto*& Data::getProductos() {
+	return productos;
+}
+
+void Data::setProductos(Producto *&productos) {
+	this->productos = productos;
+}
+
+Supermercado*& Data::getSupermercados() {
+	return supermercados;
+}
+
+void Data::setSupermercados(Supermercado *&supermercados) {
+	this->supermercados = supermercados;
+}
