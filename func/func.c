@@ -1,18 +1,18 @@
 /*
- * main.c
+ * func.c
  *
- *  Created on: 18 mar. 2022
+ *  Created on: 14 may 2022
  *      Author: asier
  */
 
-#include "menu/menu.h"
-#include "logger/logger.h"
-#include "properties/properties.h"
+#include "func.h"
+#include "../logger/logger.h"
+#include "../properties/properties.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-int main() {
+void init() {
 	openLogger("marketlog.log");
 	Properties prop;
 	FILE *file;
@@ -35,9 +35,4 @@ int main() {
 
 		createProperties(&prop, "config.prop");
 	}
-
-	prepareSocket();
-	closeLogger();
-
-	return 0;
 }
