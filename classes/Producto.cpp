@@ -5,13 +5,23 @@
  *      Author: asier
  */
 
-#include "../clases/Producto.h"
+#include "Producto.h"
+#include <string.h>
 
-Producto::Producto(int id_prod, char* nom_prod, double precio_prod, char* desc_prod) {
+Producto::Producto() {
+}
+
+Producto::Producto(int id_prod, char *nom_prod, double precio_prod,
+		char *desc_prod) {
 	this->id_prod = id_prod;
-	this->nom_prod = nom_prod;
+
+	this->nom_prod = new char[strlen(nom_prod) + 1];
+	strcpy(this->nom_prod, nom_prod);
+
 	this->precio_prod = precio_prod;
-	this->desc_prod = desc_prod;
+
+	this->desc_prod = new char[strlen(desc_prod) + 1];
+	strcpy(this->desc_prod, desc_prod);
 }
 
 Producto::~Producto() {

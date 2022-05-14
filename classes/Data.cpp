@@ -5,9 +5,25 @@
  *      Author: asier
  */
 
-#include "../clases/Data.h"
+#include "Data.h"
 
-Data::Data() {
+Data::Data(Producto *productos, int num_prods, Supermercado *supermercados,
+		int num_smkts) {
+	Producto *p = new Producto[num_prods];
+	for (int i = 0; i < num_prods; ++i) {
+		p[i] = productos[i];
+	}
+	this->productos = p;
+
+	this->num_prods = num_prods;
+
+	Supermercado *s = new Supermercado[num_smkts];
+	for (int i = 0; i < num_smkts; ++i) {
+		s[i] = supermercados[i];
+	}
+	this->supermercados = s;
+
+	this->num_smkts = num_smkts;
 }
 
 Data::~Data() {

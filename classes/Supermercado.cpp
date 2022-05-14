@@ -1,16 +1,28 @@
 /*
  * Supermercado.cpp
  *
- *  Created on: 13 may 2022
- *      Author: asier
+ *  Created on: 14 may. 2022
+ *      Author: Iker López
  */
 
-#include "../clases/Supermercado.h"
+#include "Supermercado.h"
 
-Supermercado::Supermercado(int cod_s, char* nom_s, char* dir_s, int tlf_s, double metros_cuad_s, int cod_ciu) {
+#include "Supermercado.h"
+#include <string.h>
+
+Supermercado::Supermercado() {
+}
+
+Supermercado::Supermercado(int cod_s, char *nom_s, char *dir_s, int tlf_s,
+		double metros_cuad_s, int cod_ciu) {
 	this->cod_s = cod_s;
-	this->nom_s = nom_s;
-	this->dir_s = dir_s;
+
+	this->nom_s = new char[strlen(nom_s) + 1];
+	strcpy(this->nom_s, nom_s);
+
+	this->dir_s = new char[strlen(dir_s) + 1];
+	strcpy(this->dir_s, dir_s);
+
 	this->tlf_s = tlf_s;
 	this->metros_cuad_s = metros_cuad_s;
 	this->cod_ciu = cod_ciu;
@@ -68,3 +80,4 @@ int Supermercado::getTlfS() const {
 void Supermercado::setTlfS(int tlfS) {
 	tlf_s = tlfS;
 }
+

@@ -1,16 +1,15 @@
 /*
- * func.c
+ * functions.c
  *
- *  Created on: 14 may 2022
- *      Author: asier
+ *  Created on: 14 may. 2022
+ *      Author: Iker López
  */
 
-#include "func.h"
+#include "functions.h"
 #include "../logger/logger.h"
 #include "../properties/properties.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 void init() {
 	openLogger("marketlog.log");
@@ -36,3 +35,4 @@ void init() {
 		createProperties(&prop, "config.prop");
 	}
 }
+

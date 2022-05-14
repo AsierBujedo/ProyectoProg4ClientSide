@@ -15,7 +15,6 @@ extern "C" {
 #include <winsock2.h>
 }
 
-#include "../clases/Data.h"
 #include <iostream>
 
 #define MAX_LINE 40
@@ -172,7 +171,6 @@ void manageProdMenu(bool b) {
 		strcpy(sendBuff, desc_prod);
 		send(s, sendBuff, sizeof(sendBuff), 0);
 		printf("%s\n", sendBuff); // Comp.
-
 
 // ----------------------------------------------------------------------------------------------------
 
@@ -1105,6 +1103,8 @@ void userMenu() {
 		printf("ESTADÍSTICAS\n");
 		printf("------------\n\n");
 
+		//fflush(stdout);
+
 		// SENDING command SHOWSTATS
 		strcpy(sendBuff, "SHOWSTATS");
 		send(s, sendBuff, sizeof(sendBuff), 0);
@@ -1209,7 +1209,6 @@ void mainMenu(bool b) {
 	case 3:
 		logFile(END,
 				"Opción 3 de mainMenu seleccionada (ejecución finalizada)");
-		closesocket(s);
 		exit(0);
 	}
 

@@ -1,23 +1,25 @@
 /*
  * Supermercado.h
  *
- *  Created on: 13 may 2022
- *      Author: asier
+ *  Created on: 14 may. 2022
+ *      Author: Iker López
  */
 
-#ifndef CLASES_SUPERMERCADO_H_
-#define CLASES_SUPERMERCADO_H_
+#ifndef CLASSES_SUPERMERCADO_H_
+#define CLASSES_SUPERMERCADO_H_
 
 class Supermercado {
 public:
 	int cod_s;
-	char* nom_s;
-	char* dir_s;
+	char *nom_s;
+	char *dir_s;
 	int tlf_s;
 	double metros_cuad_s;
 	int cod_ciu;
 public:
-	Supermercado(int cod_s, char* nom_s, char* dir_s, int tlf_s, double metros_cuad_s, int cod_ciu);
+	Supermercado();
+	Supermercado(int cod_s, char *nom_s, char *dir_s, int tlf_s,
+			double metros_cuad_s, int cod_ciu);
 	virtual ~Supermercado();
 	int getCodCiu() const;
 	void setCodCiu(int codCiu);
@@ -33,4 +35,4 @@ public:
 	void setTlfS(int tlfS);
 };
 
-#endif /* CLASES_SUPERMERCADO_H_ */
+#endif /* CLASSES_SUPERMERCADO_H_ */

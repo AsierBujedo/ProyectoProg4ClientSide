@@ -1,8 +1,4 @@
 
 *.o
 *.exe
-.settings/language.settings.xml
-Debug/main.o
-Debug/marketlog.log
-marketlog.log
 /Debug/

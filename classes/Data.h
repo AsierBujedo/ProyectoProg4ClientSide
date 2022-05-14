@@ -5,19 +5,20 @@
  *      Author: asier
  */
 
-#ifndef CLASES_DATA_H_
-#define CLASES_DATA_H_
+#ifndef CLASSES_DATA_H_
+#define CLASSES_DATA_H_
 
-#include "../clases/Producto.h"
-#include "../clases/Supermercado.h"
+#include "Producto.h"
+#include "Supermercado.h"
 
 class Data {
-	Producto* productos;
+	Producto *productos;
 	int num_prods;
-	Supermercado* supermercados;
+	Supermercado *supermercados;
 	int num_smkts;
 public:
-	Data();
+	Data(Producto *productos, int num_prods, Supermercado *supermercados,
+			int num_smkts);
 	virtual ~Data();
 	int getNumProds() const;
 	void setNumProds(int numProds);
@@ -29,4 +30,4 @@ public:
 	void setSupermercados(Supermercado *&supermercados);
 };
 
-#endif /* CLASES_DATA_H_ */
+#endif /* CLASSES_DATA_H_ */
