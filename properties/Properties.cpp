@@ -1,36 +1,37 @@
 /*
- * properties.c
+ * Properties.cpp
  *
  *  Created on: 1 abr. 2022
  *      Author: asier
  */
 
-#include "properties.h"
-#include "../logger/logger.h"
+#include "Properties.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "../logger/Logger.h"
 
 #define MAX 1000
 
-void createProperties(Properties *properties, char name[]) {
+void Properties::createProperties(Properties *properties, char name[]) {
 	FILE *f = fopen(name, "w");
 
 	for (int i = 0; i < properties->numProp; i++) {
 		fprintf(f, "-%s\n", properties->propName[i]); //NOMBRE DE LA PROPIEDAD
 		fprintf(f, "%s\n", properties->propValue[i]); //VALOR DE LA PROPIEDAD
 	}
-	logFile(INFO, "Fichero de configuración creado");
+	logger->logFile(INFO, "Fichero de configuración creado");
 	fclose(f);
 
 }
 
-void allocate(Properties *prop, char name[]) {
+void Properties::allocate(Properties *prop, char name[]) {
 	FILE *f = fopen(name, "r");
 
 	char buffer[MAX];
-	char** nombres = malloc(sizeof(char*) * prop->numProp);
-	char** valores = malloc(sizeof(char*) * prop->numProp);
+	char** nombres = new char*[sizeof(char*) * prop->numProp];
+	char** valores = new char*[sizeof(char*) * prop->numProp];
 	int props = prop->numProp;
 	int posEnValue = 0;
 	int posEnName = 0;
@@ -39,13 +40,13 @@ void allocate(Properties *prop, char name[]) {
 		if (buffer[0] == '-') {
 			if (posEnName < props) {
 				buffer[0] = ' ';
-				nombres[posEnName] = malloc(sizeof(char)*MAX);
+				nombres[posEnName] = new char[sizeof(char)*MAX];
 				strcpy(nombres[posEnName], buffer);
 				posEnName++;
 			}
 		} else if (buffer[0] != '-') {
 			if (posEnValue < props) {
-				valores[posEnValue] = malloc(sizeof(char)*MAX);
+				valores[posEnValue] = new char[sizeof(char)*MAX];
 				strcpy(valores[posEnValue], buffer);
 				posEnValue++;
 			}
@@ -54,12 +55,12 @@ void allocate(Properties *prop, char name[]) {
 
 	prop->propName = nombres;
 	prop->propValue = valores;
-	logFile(INFO, "Propiedades cargadas con éxito");
+	logger->logFile(INFO, "Propiedades cargadas con éxito");
 	fclose(f);
 
 }
 
-void loadProperties(Properties *properties, char name[]) {
+void Properties::loadProperties(Properties *properties, char name[]) {
 	FILE *f = fopen(name, "r");
 
 	properties->numProp = 0;
@@ -75,6 +76,8 @@ void loadProperties(Properties *properties, char name[]) {
 	fclose(f);
 
 	allocate(properties, name);
+}
 
-
+void Properties::setLogger(Logger *logger) {
+	this->logger = logger;
 }

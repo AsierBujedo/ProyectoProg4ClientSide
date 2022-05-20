@@ -1,33 +1,37 @@
 /*
- * menu.cpp
+ * Menu.cpp
  *
  *  Created on: 3 may. 2022
  *      Author: Iker López
  */
 
-extern "C" {
-#include "menu.h"
-#include "../logger/logger.h"
-#include "../properties/properties.h"
+#include "Menu.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <winsock2.h>
-}
 
 #include <iostream>
+
+#include "../logger/Logger.h"
+#include "../properties/Properties.h"
 
 #define MAX_LINE 40
 
 using namespace std;
 
-Properties properties;
-SOCKET s;
+SOCKET comm_s;
 char sendBuff[512], recvBuff[2048];
-#define SERVER_IP "127.0.0.1" // Fichero de configuración
-#define SERVER_PORT 6000 // Fichero de configuración
+char *SERVER_IP;
+int SERVER_PORT;
 
-int prepareSocket() {
+int Menu::prepareSocket() {
+	this->s = &comm_s;
+	SERVER_IP = this->prop->propValue[0];
+	char *SERVER_PORT_AUX = this->prop->propValue[1];
+	SERVER_PORT = atoi(SERVER_PORT_AUX);
+
 	WSADATA wsaData;
 	struct sockaddr_in server;
 
@@ -40,7 +44,7 @@ int prepareSocket() {
 	printf("Initialised.\n");
 
 	//SOCKET creation
-	if ((s = socket(AF_INET, SOCK_STREAM, 0)) == INVALID_SOCKET) {
+	if ((*s = socket(AF_INET, SOCK_STREAM, 0)) == INVALID_SOCKET) {
 		printf("Could not create socket : %d", WSAGetLastError());
 		WSACleanup();
 		return -1;
@@ -53,9 +57,9 @@ int prepareSocket() {
 	server.sin_port = htons(SERVER_PORT);
 
 	//CONNECT to remote server
-	if (connect(s, (struct sockaddr*) &server, sizeof(server)) == SOCKET_ERROR) {
+	if (connect(*s, (struct sockaddr*) &server, sizeof(server)) == SOCKET_ERROR) {
 		printf("Connection error: %d", WSAGetLastError());
-		closesocket(s);
+		closesocket(*s);
 		WSACleanup();
 		return -1;
 	}
@@ -69,7 +73,7 @@ int prepareSocket() {
 }
 
 // NIVEL DE MENÚ: 5 (administrador)
-void manageProdMenu(bool b) {
+void Menu::manageProdMenu(bool b) {
 	char *sql;
 	char str[MAX_LINE];
 	char strAux[2];
@@ -94,7 +98,8 @@ void manageProdMenu(bool b) {
 
 	switch (opt) {
 	case 1:
-		logFile(INFO, "Opción 1 de manageProdMenu seleccionada (addProduct)");
+		logger->logFile(INFO,
+				"Opción 1 de manageProdMenu seleccionada (addProduct)");
 
 		printf("\n---------------\n");
 		printf("AÑADIR PRODUCTO\n");
@@ -106,20 +111,21 @@ void manageProdMenu(bool b) {
 
 		// SENDING command SHOWPRODSPK
 		strcpy(sendBuff, "SHOWPRODSPK");
-		send(s, sendBuff, sizeof(sendBuff), 0);
+		send(*s, sendBuff, sizeof(sendBuff), 0);
+		printf("%s\n", sendBuff);
 
 		// RECEIVING response to command SHOWPRODSPK from the server
-		recv(s, recvBuff, sizeof(recvBuff), 0);
+		recv(*s, recvBuff, sizeof(recvBuff), 0);
 
 		while (strcmp(recvBuff, "END")) {
 			printf("%s\n", recvBuff);
-			recv(s, recvBuff, sizeof(recvBuff), 0);
+			recv(*s, recvBuff, sizeof(recvBuff), 0);
 		}
 		//cout << recvBuff << "/n" << endl;
 
 		// ----------------------------------------------------------------------------------------------------
 
-		logFile(INFO, "Códigos de productos mostrados");
+		logger->logFile(INFO, "Códigos de productos mostrados");
 
 		printf("\nIntroduzca el código: ");
 		fflush(stdout);
@@ -149,27 +155,27 @@ void manageProdMenu(bool b) {
 
 		// SENDING command ADDPRODDB
 		strcpy(sendBuff, "ADDPRODDB");
-		send(s, sendBuff, sizeof(sendBuff), 0);
+		send(*s, sendBuff, sizeof(sendBuff), 0);
 		printf("%s ", sendBuff); // Comp.
 
 		// Enviar id_prod
 		strcpy(sendBuff, id_prod);
-		send(s, sendBuff, sizeof(sendBuff), 0);
+		send(*s, sendBuff, sizeof(sendBuff), 0);
 		printf("%s ", sendBuff); // Comp.
 
 		// Enviar nom_prod
 		strcpy(sendBuff, nom_prod);
-		send(s, sendBuff, sizeof(sendBuff), 0);
+		send(*s, sendBuff, sizeof(sendBuff), 0);
 		printf("%s ", sendBuff); // Comp.
 
 		// Enviar precio_prod
 		strcpy(sendBuff, precio_prod);
-		send(s, sendBuff, sizeof(sendBuff), 0);
+		send(*s, sendBuff, sizeof(sendBuff), 0);
 		printf("%s ", sendBuff); // Comp.
 
 		// Enviar desc_prod
 		strcpy(sendBuff, desc_prod);
-		send(s, sendBuff, sizeof(sendBuff), 0);
+		send(*s, sendBuff, sizeof(sendBuff), 0);
 		printf("%s\n", sendBuff); // Comp.
 
 // ----------------------------------------------------------------------------------------------------
@@ -179,12 +185,12 @@ void manageProdMenu(bool b) {
 		fgets(strAux, 2, stdin);
 		fflush(stdin);
 
-		logFile(INFO, "manageProdMenu<<");
+		logger->logFile(INFO, "manageProdMenu<<");
 		manageProdMenu(false);
 		break;
 
 	case 2:
-		logFile(INFO,
+		logger->logFile(INFO,
 				"Opción 2 de manageProdMenu seleccionada (deleteProduct)");
 
 		printf("\n-----------------\n");
@@ -203,33 +209,34 @@ void manageProdMenu(bool b) {
 
 		// SENDING command SHOWPRODS
 		strcpy(sendBuff, "SHOWPRODS");
-		send(s, sendBuff, sizeof(sendBuff), 0);
+		send(*s, sendBuff, sizeof(sendBuff), 0);
+		printf("%s\n", sendBuff);
 
 		// RECEIVING response to command SHOWPRODS from the server
-		recv(s, recvBuff, sizeof(recvBuff), 0);
+		recv(*s, recvBuff, sizeof(recvBuff), 0);
 
 		while (strcmp(recvBuff, "END")) {
 			printf("%s || ", recvBuff);
 			//cout << recvBuff << " || " << endl;
 
-			recv(s, recvBuff, sizeof(recvBuff), 0);
+			recv(*s, recvBuff, sizeof(recvBuff), 0);
 			printf("%s || ", recvBuff);
 			//cout << recvBuff << " || " << endl;
 
-			recv(s, recvBuff, sizeof(recvBuff), 0);
+			recv(*s, recvBuff, sizeof(recvBuff), 0);
 			printf("%s || ", recvBuff);
 			//cout << recvBuff << " || " << endl;
 
-			recv(s, recvBuff, sizeof(recvBuff), 0);
+			recv(*s, recvBuff, sizeof(recvBuff), 0);
 			printf("%s\n", recvBuff);
 			//cout << recvBuff << "/n" << endl;
 
-			recv(s, recvBuff, sizeof(recvBuff), 0);
+			recv(*s, recvBuff, sizeof(recvBuff), 0);
 		}
 
 		// ----------------------------------------------------------------------------------------------------
 
-		logFile(INFO, "Lista completa de productos mostrada");
+		logger->logFile(INFO, "Lista completa de productos mostrada");
 
 		if (b) {
 			printf(
@@ -258,12 +265,12 @@ void manageProdMenu(bool b) {
 
 			// SENDING command DELPRODDB
 			strcpy(sendBuff, "DELPRODDB");
-			send(s, sendBuff, sizeof(sendBuff), 0);
+			send(*s, sendBuff, sizeof(sendBuff), 0);
 			printf("%s ", sendBuff);
 
 			// Enviar id_prod
 			strcpy(sendBuff, id_prod);
-			send(s, sendBuff, sizeof(sendBuff), 0);
+			send(*s, sendBuff, sizeof(sendBuff), 0);
 			printf("%s\n", sendBuff);
 
 // ----------------------------------------------------------------------------------------------------
@@ -277,12 +284,12 @@ void manageProdMenu(bool b) {
 			manageProdMenu(false);
 		}
 
-		logFile(INFO, "manageProdMenu<<");
+		logger->logFile(INFO, "manageProdMenu<<");
 		manageProdMenu(false);
 		break;
 
 	case 3:
-		logFile(INFO,
+		logger->logFile(INFO,
 				"Opción 3 de manageProdMenu seleccionada (updateProduct)");
 
 		printf("\n-------------------\n");
@@ -301,33 +308,34 @@ void manageProdMenu(bool b) {
 
 		// SENDING command SHOWPRODS
 		strcpy(sendBuff, "SHOWPRODS");
-		send(s, sendBuff, sizeof(sendBuff), 0);
+		send(*s, sendBuff, sizeof(sendBuff), 0);
+		printf("%s\n", sendBuff);
 
 		// RECEIVING response to command SHOWPRODS from the server
-		recv(s, recvBuff, sizeof(recvBuff), 0);
+		recv(*s, recvBuff, sizeof(recvBuff), 0);
 
 		while (strcmp(recvBuff, "END")) {
 			printf("%s || ", recvBuff);
 			//cout << recvBuff << " || " << endl;
 
-			recv(s, recvBuff, sizeof(recvBuff), 0);
+			recv(*s, recvBuff, sizeof(recvBuff), 0);
 			printf("%s || ", recvBuff);
 			//cout << recvBuff << " || " << endl;
 
-			recv(s, recvBuff, sizeof(recvBuff), 0);
+			recv(*s, recvBuff, sizeof(recvBuff), 0);
 			printf("%s || ", recvBuff);
 			//cout << recvBuff << " || " << endl;
 
-			recv(s, recvBuff, sizeof(recvBuff), 0);
+			recv(*s, recvBuff, sizeof(recvBuff), 0);
 			printf("%s\n", recvBuff);
 			//cout << recvBuff << "/n" << endl;
 
-			recv(s, recvBuff, sizeof(recvBuff), 0);
+			recv(*s, recvBuff, sizeof(recvBuff), 0);
 		}
 
 		// --------------------------------------------------------------------------------
 
-		logFile(INFO, "Lista completa de productos mostrada");
+		logger->logFile(INFO, "Lista completa de productos mostrada");
 
 		if (b) {
 			printf(
@@ -367,27 +375,27 @@ void manageProdMenu(bool b) {
 
 		// SENDING command UDPRODDB
 		strcpy(sendBuff, "UDPRODDB");
-		send(s, sendBuff, sizeof(sendBuff), 0);
+		send(*s, sendBuff, sizeof(sendBuff), 0);
 		printf("%s ", sendBuff);
 
 		// Enviar id_prod
 		strcpy(sendBuff, id_prod);
-		send(s, sendBuff, sizeof(sendBuff), 0);
+		send(*s, sendBuff, sizeof(sendBuff), 0);
 		printf("%s ", sendBuff);
 
 		// Enviar nom_prod
 		strcpy(sendBuff, nom_prod);
-		send(s, sendBuff, sizeof(sendBuff), 0);
+		send(*s, sendBuff, sizeof(sendBuff), 0);
 		printf("%s ", sendBuff);
 
 		// Enviar precio_prod
 		strcpy(sendBuff, precio_prod);
-		send(s, sendBuff, sizeof(sendBuff), 0);
+		send(*s, sendBuff, sizeof(sendBuff), 0);
 		printf("%s ", sendBuff);
 
 		// Enviar desc_prod
 		strcpy(sendBuff, desc_prod);
-		send(s, sendBuff, sizeof(sendBuff), 0);
+		send(*s, sendBuff, sizeof(sendBuff), 0);
 		printf("%s\n", sendBuff);
 
 // ----------------------------------------------------------------------------------------------------
@@ -398,22 +406,22 @@ void manageProdMenu(bool b) {
 		fgets(strAux, 2, stdin);
 		fflush(stdin);
 
-		logFile(INFO, "manageProdMenu<<");
+		logger->logFile(INFO, "manageProdMenu<<");
 		manageProdMenu(false);
 		break;
 
 	case 4:
-		logFile(INFO,
+		logger->logFile(INFO,
 				"Opción 4 de manageProdMenu seleccionada (updateBDMenu<<)");
 		updateBDMenu();
-		logFile(INFO, "manageProdMenu<<");
+		logger->logFile(INFO, "manageProdMenu<<");
 		manageProdMenu(false);
 		break;
 	}
 }
 
 // NIVEL DE MENÚ: 5 (administrador)
-void manageSuperMenu(bool b) {
+void Menu::manageSuperMenu(bool b) {
 	char *sql;
 	char str[MAX_LINE];
 	char strAux[2];
@@ -440,7 +448,7 @@ void manageSuperMenu(bool b) {
 
 	switch (opt) {
 	case 1:
-		logFile(INFO,
+		logger->logFile(INFO,
 				"Opción 1 de manageSuperMenu seleccionada (addSupermarket)");
 
 		printf("\n-------------------\n");
@@ -453,20 +461,21 @@ void manageSuperMenu(bool b) {
 
 		// SENDING command SHOWSMKTSPK
 		strcpy(sendBuff, "SHOWSMKTSPK");
-		send(s, sendBuff, sizeof(sendBuff), 0);
+		send(*s, sendBuff, sizeof(sendBuff), 0);
+		printf("%s\n", sendBuff);
 
 		// RECEIVING response to command SHOWSMKTSPK from the server
-		recv(s, recvBuff, sizeof(recvBuff), 0);
+		recv(*s, recvBuff, sizeof(recvBuff), 0);
 
 		while (strcmp(recvBuff, "END") != 0) {
 			printf("%s\n", recvBuff);
-			recv(s, recvBuff, sizeof(recvBuff), 0);
+			recv(*s, recvBuff, sizeof(recvBuff), 0);
 			//cout << recvBuff << "/n" << endl;
 		}
 
 		// ----------------------------------------------------------------------------------------------------
 
-		logFile(INFO, "Códigos de supermercados mostrados");
+		logger->logFile(INFO, "Códigos de supermercados mostrados");
 
 		printf("\nIntroduzca el código: ");
 		fflush(stdout);
@@ -508,37 +517,37 @@ void manageSuperMenu(bool b) {
 
 		// SENDING command ADDSMKTDB
 		strcpy(sendBuff, "ADDSMKTDB");
-		send(s, sendBuff, sizeof(sendBuff), 0);
+		send(*s, sendBuff, sizeof(sendBuff), 0);
 		printf("%s ", sendBuff); // Comp.
 
 		// Enviar cod_s
 		strcpy(sendBuff, cod_s);
-		send(s, sendBuff, sizeof(sendBuff), 0);
+		send(*s, sendBuff, sizeof(sendBuff), 0);
 		printf("%s ", sendBuff); // Comp.
 
 		// Enviar nom_s
 		strcpy(sendBuff, nom_s);
-		send(s, sendBuff, sizeof(sendBuff), 0);
+		send(*s, sendBuff, sizeof(sendBuff), 0);
 		printf("%s ", sendBuff); // Comp.
 
 		// Enviar dir_s
 		strcpy(sendBuff, dir_s);
-		send(s, sendBuff, sizeof(sendBuff), 0);
+		send(*s, sendBuff, sizeof(sendBuff), 0);
 		printf("%s ", sendBuff); // Comp.
 
 		// Enviar tlf_s
 		strcpy(sendBuff, tlf_s);
-		send(s, sendBuff, sizeof(sendBuff), 0);
+		send(*s, sendBuff, sizeof(sendBuff), 0);
 		printf("%s ", sendBuff); // Comp.
 
 		// Enviar metros_cuad_s
 		strcpy(sendBuff, metros_cuad_s);
-		send(s, sendBuff, sizeof(sendBuff), 0);
+		send(*s, sendBuff, sizeof(sendBuff), 0);
 		printf("%s ", sendBuff); // Comp.
 
 		// Enviar cod_ciu
 		strcpy(sendBuff, cod_ciu);
-		send(s, sendBuff, sizeof(sendBuff), 0);
+		send(*s, sendBuff, sizeof(sendBuff), 0);
 		printf("%s\n", sendBuff); // Comp.
 
 // ----------------------------------------------------------------------------------------------------
@@ -549,12 +558,12 @@ void manageSuperMenu(bool b) {
 		fgets(strAux, 2, stdin);
 		fflush(stdin);
 
-		logFile(INFO, "manageSuperMenu<<");
+		logger->logFile(INFO, "manageSuperMenu<<");
 		manageSuperMenu(false);
 		break;
 
 	case 2:
-		logFile(INFO,
+		logger->logFile(INFO,
 				"Opción 2 de manageSuperMenu seleccionada (deleteSupermarket)");
 
 		printf("\n---------------------\n");
@@ -574,41 +583,42 @@ void manageSuperMenu(bool b) {
 
 		// SENDING command SHOWSMKTS
 		strcpy(sendBuff, "SHOWSMKTS");
-		send(s, sendBuff, sizeof(sendBuff), 0);
+		send(*s, sendBuff, sizeof(sendBuff), 0);
+		printf("%s\n", sendBuff);
 
 		// RECEIVING response to command SHOWSMKTS from the server
-		recv(s, recvBuff, sizeof(recvBuff), 0);
+		recv(*s, recvBuff, sizeof(recvBuff), 0);
 
 		while (strcmp(recvBuff, "END")) {
 			printf("%s || ", recvBuff);
 			//cout << recvBuff << " || " << endl;
 
-			recv(s, recvBuff, sizeof(recvBuff), 0);
+			recv(*s, recvBuff, sizeof(recvBuff), 0);
 			printf("%s || ", recvBuff);
 			//cout << recvBuff << " || " << endl;
 
-			recv(s, recvBuff, sizeof(recvBuff), 0);
+			recv(*s, recvBuff, sizeof(recvBuff), 0);
 			printf("%s || ", recvBuff);
 			//cout << recvBuff << " || " << endl;
 
-			recv(s, recvBuff, sizeof(recvBuff), 0);
+			recv(*s, recvBuff, sizeof(recvBuff), 0);
 			printf("%s || ", recvBuff);
 			//cout << recvBuff << " || " << endl;
 
-			recv(s, recvBuff, sizeof(recvBuff), 0);
+			recv(*s, recvBuff, sizeof(recvBuff), 0);
 			printf("%s || ", recvBuff);
 			//cout << recvBuff << " || " << endl;
 
-			recv(s, recvBuff, sizeof(recvBuff), 0);
+			recv(*s, recvBuff, sizeof(recvBuff), 0);
 			printf("%s\n", recvBuff);
 			//cout << recvBuff << "\n" << endl;
 
-			recv(s, recvBuff, sizeof(recvBuff), 0);
+			recv(*s, recvBuff, sizeof(recvBuff), 0);
 		}
 
 		// ----------------------------------------------------------------------------------------------------
 
-		logFile(INFO, "Lista completa de supermercados mostrada");
+		logger->logFile(INFO, "Lista completa de supermercados mostrada");
 
 		if (b) {
 			printf(
@@ -638,12 +648,12 @@ void manageSuperMenu(bool b) {
 
 			// SENDING command DELSMKTDB
 			strcpy(sendBuff, "DELSMKTDB");
-			send(s, sendBuff, sizeof(sendBuff), 0);
+			send(*s, sendBuff, sizeof(sendBuff), 0);
 			printf("%s ", sendBuff); // Comp.
 
 			// Enviar cod_s
 			strcpy(sendBuff, cod_s);
-			send(s, sendBuff, sizeof(sendBuff), 0);
+			send(*s, sendBuff, sizeof(sendBuff), 0);
 			printf("%s\n", sendBuff); // Comp.
 
 // ----------------------------------------------------------------------------------------------------
@@ -657,12 +667,12 @@ void manageSuperMenu(bool b) {
 			manageSuperMenu(false);
 		}
 
-		logFile(INFO, "manageSuperMenu<<");
+		logger->logFile(INFO, "manageSuperMenu<<");
 		manageSuperMenu(false);
 		break;
 
 	case 3:
-		logFile(INFO,
+		logger->logFile(INFO,
 				"Opción 3 de manageSuperMenu seleccionada (updateSupermarket())");
 
 		printf("\n-----------------------\n");
@@ -682,40 +692,41 @@ void manageSuperMenu(bool b) {
 
 		// SENDING command SHOWSMKTS
 		strcpy(sendBuff, "SHOWSMKTS");
-		send(s, sendBuff, sizeof(sendBuff), 0);
+		send(*s, sendBuff, sizeof(sendBuff), 0);
+		printf("%s\n", sendBuff);
 
 		// RECEIVING response to command SHOWSMKTS from the server
-		recv(s, recvBuff, sizeof(recvBuff), 0);
+		recv(*s, recvBuff, sizeof(recvBuff), 0);
 
 		while (strcmp(recvBuff, "END")) {
 			printf("%s || ", recvBuff);
 			//cout << recvBuff << " || " << endl;
 
-			recv(s, recvBuff, sizeof(recvBuff), 0);
+			recv(*s, recvBuff, sizeof(recvBuff), 0);
 			printf("%s || ", recvBuff);
 			//cout << recvBuff << " || " << endl;
 
-			recv(s, recvBuff, sizeof(recvBuff), 0);
+			recv(*s, recvBuff, sizeof(recvBuff), 0);
 			printf("%s || ", recvBuff);
 			//cout << recvBuff << " || " << endl;
 
-			recv(s, recvBuff, sizeof(recvBuff), 0);
+			recv(*s, recvBuff, sizeof(recvBuff), 0);
 			printf("%s || ", recvBuff);
 			//cout << recvBuff << " || " << endl;
 
-			recv(s, recvBuff, sizeof(recvBuff), 0);
+			recv(*s, recvBuff, sizeof(recvBuff), 0);
 			printf("%s || ", recvBuff);
 			//cout << recvBuff << " || " << endl;
 
-			recv(s, recvBuff, sizeof(recvBuff), 0);
+			recv(*s, recvBuff, sizeof(recvBuff), 0);
 			printf("%s\n", recvBuff);
 			//cout << recvBuff << "\n" << endl;
-			recv(s, recvBuff, sizeof(recvBuff), 0);
+			recv(*s, recvBuff, sizeof(recvBuff), 0);
 		}
 
 		// ----------------------------------------------------------------------------------------------------
 
-		logFile(INFO, "Lista completa de supermercados mostrada");
+		logger->logFile(INFO, "Lista completa de supermercados mostrada");
 
 		if (b) {
 			printf(
@@ -767,37 +778,37 @@ void manageSuperMenu(bool b) {
 
 		// SENDING command UDSMKTDB
 		strcpy(sendBuff, "UDSMKTDB");
-		send(s, sendBuff, sizeof(sendBuff), 0);
+		send(*s, sendBuff, sizeof(sendBuff), 0);
 		printf("%s ", sendBuff);
 
 		// Enviar cod_s
 		strcpy(sendBuff, cod_s);
-		send(s, sendBuff, sizeof(sendBuff), 0);
+		send(*s, sendBuff, sizeof(sendBuff), 0);
 		printf("%s ", sendBuff);
 
 		// Enviar nom_s
 		strcpy(sendBuff, nom_s);
-		send(s, sendBuff, sizeof(sendBuff), 0);
+		send(*s, sendBuff, sizeof(sendBuff), 0);
 		printf("%s ", sendBuff);
 
 		// Enviar dir_s
 		strcpy(sendBuff, dir_s);
-		send(s, sendBuff, sizeof(sendBuff), 0);
+		send(*s, sendBuff, sizeof(sendBuff), 0);
 		printf("%s ", sendBuff);
 
 		// Enviar tlf_s
 		strcpy(sendBuff, tlf_s);
-		send(s, sendBuff, sizeof(sendBuff), 0);
+		send(*s, sendBuff, sizeof(sendBuff), 0);
 		printf("%s ", sendBuff);
 
 		// Enviar metros_cuad_s
 		strcpy(sendBuff, metros_cuad_s);
-		send(s, sendBuff, sizeof(sendBuff), 0);
+		send(*s, sendBuff, sizeof(sendBuff), 0);
 		printf("%s ", sendBuff);
 
 		// Enviar cod_ciu
 		strcpy(sendBuff, cod_ciu);
-		send(s, sendBuff, sizeof(sendBuff), 0);
+		send(*s, sendBuff, sizeof(sendBuff), 0);
 		printf("%s\n", sendBuff);
 
 // ----------------------------------------------------------------------------------------------------
@@ -808,12 +819,12 @@ void manageSuperMenu(bool b) {
 		fgets(strAux, 2, stdin);
 		fflush(stdin);
 
-		logFile(INFO, "manageSuperMenu<<");
+		logger->logFile(INFO, "manageSuperMenu<<");
 		manageSuperMenu(false);
 		break;
 
 	case 4:
-		logFile(INFO,
+		logger->logFile(INFO,
 				"Opción 4 de manageSuperMenu seleccionada (updateBDMenu<<)");
 		updateBDMenu();
 		break;
@@ -821,7 +832,7 @@ void manageSuperMenu(bool b) {
 }
 
 // NIVEL DE MENÚ: 4
-void updateBDMenu() {
+void Menu::updateBDMenu() {
 	int opt;
 	char str[10];
 
@@ -839,26 +850,27 @@ void updateBDMenu() {
 
 	switch (opt) {
 	case 1:
-		logFile(INFO,
+		logger->logFile(INFO,
 				"Opción 1 de updateBDMenu seleccionada (>>manageSuperMenu)");
 		manageSuperMenu(false);
 		break;
 
 	case 2:
-		logFile(INFO,
+		logger->logFile(INFO,
 				"Opción 2 de updateBDMenu seleccionada (>>manageProdMenu)");
 		manageProdMenu(false);
 		break;
 
 	case 3:
-		logFile(INFO, "Opción 3 de updateBDMenu seleccionada (adminMenu<<)");
+		logger->logFile(INFO,
+				"Opción 3 de updateBDMenu seleccionada (adminMenu<<)");
 		adminMenu();
 		break;
 	}
 }
 
 // NIVEL DE MENÚ: 3 (usuario) y 4 (administrador)
-void queryBDMenu(bool b) {
+void Menu::queryBDMenu(bool b) {
 	char strAux[2];
 	int opt;
 	char str[10];
@@ -877,7 +889,7 @@ void queryBDMenu(bool b) {
 
 	switch (opt) {
 	case 1:
-		logFile(INFO,
+		logger->logFile(INFO,
 				"Opción 1 de queryBDMenu seleccionada (showSupermarkets)");
 
 		if (b) {
@@ -893,40 +905,41 @@ void queryBDMenu(bool b) {
 
 		// SENDING command SHOWSMKTS
 		strcpy(sendBuff, "SHOWSMKTS");
-		send(s, sendBuff, sizeof(sendBuff), 0);
+		send(*s, sendBuff, sizeof(sendBuff), 0);
+		printf("%s\n", sendBuff);
 
 		// RECEIVING response to command SHOWSMKTS from the server
-		recv(s, recvBuff, sizeof(recvBuff), 0);
+		recv(*s, recvBuff, sizeof(recvBuff), 0);
 
 		while (strcmp(recvBuff, "END")) {
 			printf("%s || ", recvBuff);
 			//cout << recvBuff << " || " << endl;
 
-			recv(s, recvBuff, sizeof(recvBuff), 0);
+			recv(*s, recvBuff, sizeof(recvBuff), 0);
 			printf("%s || ", recvBuff);
 			//cout << recvBuff << " || " << endl;
 
-			recv(s, recvBuff, sizeof(recvBuff), 0);
+			recv(*s, recvBuff, sizeof(recvBuff), 0);
 			printf("%s || ", recvBuff);
 			//cout << recvBuff << " || " << endl;
 
-			recv(s, recvBuff, sizeof(recvBuff), 0);
+			recv(*s, recvBuff, sizeof(recvBuff), 0);
 			printf("%s || ", recvBuff);
 			//cout << recvBuff << " || " << endl;
 
-			recv(s, recvBuff, sizeof(recvBuff), 0);
+			recv(*s, recvBuff, sizeof(recvBuff), 0);
 			printf("%s || ", recvBuff);
 			//cout << recvBuff << " || " << endl;
 
-			recv(s, recvBuff, sizeof(recvBuff), 0);
+			recv(*s, recvBuff, sizeof(recvBuff), 0);
 			printf("%s\n", recvBuff);
 			//cout << recvBuff << "\n" << endl;
-			recv(s, recvBuff, sizeof(recvBuff), 0);
+			recv(*s, recvBuff, sizeof(recvBuff), 0);
 		}
 
 		// --------------------------------------------------------------------------------
 
-		logFile(INFO, "Lista completa de supermercados mostrada");
+		logger->logFile(INFO, "Lista completa de supermercados mostrada");
 
 		if (b) {
 			printf(
@@ -936,12 +949,13 @@ void queryBDMenu(bool b) {
 			fflush(stdin);
 		}
 
-		logFile(INFO, "mainMenu<<");
+		logger->logFile(INFO, "mainMenu<<");
 		mainMenu(true);
 		break;
 
 	case 2:
-		logFile(INFO, "Opción 2 de queryBDMenu seleccionada (showProducts)");
+		logger->logFile(INFO,
+				"Opción 2 de queryBDMenu seleccionada (showProducts)");
 
 		if (b) {
 			printf("\n---------------------------\n");
@@ -955,33 +969,34 @@ void queryBDMenu(bool b) {
 
 		// SENDING command SHOWPRODS
 		strcpy(sendBuff, "SHOWPRODS");
-		send(s, sendBuff, sizeof(sendBuff), 0);
+		send(*s, sendBuff, sizeof(sendBuff), 0);
+		printf("%s\n", sendBuff);
 
 		// RECEIVING response to command SHOWPRODS from the server
-		recv(s, recvBuff, sizeof(recvBuff), 0);
+		recv(*s, recvBuff, sizeof(recvBuff), 0);
 
 		while (strcmp(recvBuff, "END")) {
 			printf("%s || ", recvBuff);
 			//cout << recvBuff << " || " << endl;
 
-			recv(s, recvBuff, sizeof(recvBuff), 0);
+			recv(*s, recvBuff, sizeof(recvBuff), 0);
 			printf("%s || ", recvBuff);
 			//cout << recvBuff << " || " << endl;
 
-			recv(s, recvBuff, sizeof(recvBuff), 0);
+			recv(*s, recvBuff, sizeof(recvBuff), 0);
 			printf("%s || ", recvBuff);
 			//cout << recvBuff << " || " << endl;
 
-			recv(s, recvBuff, sizeof(recvBuff), 0);
+			recv(*s, recvBuff, sizeof(recvBuff), 0);
 			printf("%s\n", recvBuff);
 			//cout << recvBuff << "/n" << endl;
 
-			recv(s, recvBuff, sizeof(recvBuff), 0);
+			recv(*s, recvBuff, sizeof(recvBuff), 0);
 		}
 
 		// --------------------------------------------------------------------------------
 
-		logFile(INFO, "Lista completa de productos mostrada");
+		logger->logFile(INFO, "Lista completa de productos mostrada");
 
 		if (b) {
 			printf(
@@ -991,19 +1006,20 @@ void queryBDMenu(bool b) {
 			fflush(stdin);
 		}
 
-		logFile(INFO, "mainMenu<<");
+		logger->logFile(INFO, "mainMenu<<");
 		mainMenu(true);
 		break;
 
 	case 3:
-		logFile(INFO, "Opción 3 de queryBDMenu seleccionada (mainMenu<<)");
+		logger->logFile(INFO,
+				"Opción 3 de queryBDMenu seleccionada (mainMenu<<)");
 		mainMenu(true);
 		break;
 	}
 }
 
 // NIVEL DE MENÚ: 3
-void adminMenu() {
+void Menu::adminMenu() {
 	char strAux[2];
 	int opt;
 	char str[10];
@@ -1023,17 +1039,20 @@ void adminMenu() {
 
 	switch (opt) {
 	case 1:
-		logFile(INFO, "Opción 1 de adminMenu seleccionada (>>updateBDMenu)");
+		logger->logFile(INFO,
+				"Opción 1 de adminMenu seleccionada (>>updateBDMenu)");
 		updateBDMenu();
 		break;
 
 	case 2:
-		logFile(INFO, "Opción 2 de adminMenu seleccionada (>>queryBDMenu)");
+		logger->logFile(INFO,
+				"Opción 2 de adminMenu seleccionada (>>queryBDMenu)");
 		queryBDMenu(true);
 		break;
 
 	case 3:
-		logFile(INFO, "Opción 3 de adminMenu seleccionada (showStatistics)");
+		logger->logFile(INFO,
+				"Opción 3 de adminMenu seleccionada (showStatistics)");
 
 		printf("\n------------\n");
 		printf("ESTADÍSTICAS\n");
@@ -1041,19 +1060,20 @@ void adminMenu() {
 
 		// SENDING command SHOWSTATS
 		strcpy(sendBuff, "SHOWSTATS");
-		send(s, sendBuff, sizeof(sendBuff), 0);
+		send(*s, sendBuff, sizeof(sendBuff), 0);
+		printf("%s\n", sendBuff);
 
 		// RECEIVING response to command SHOWSTATS from the server
-		recv(s, recvBuff, sizeof(recvBuff), 0);
+		recv(*s, recvBuff, sizeof(recvBuff), 0);
 		printf("Media de los precios de los productos: %s\n", recvBuff);
 //		cout << "Media de los precios de los productos: " << recvBuff << endl;
 
-		recv(s, recvBuff, sizeof(recvBuff), 0);
+		recv(*s, recvBuff, sizeof(recvBuff), 0);
 		printf("Media de los metros cuadrados de los supermercados: %s\n",
 				recvBuff);
 //		cout << "Media de los metros cuadrados de los supermercados: " << recvBuff << endl;
 
-		logFile(INFO, "Estadísticas mostradas");
+		logger->logFile(INFO, "Estadísticas mostradas");
 
 		printf(
 				"\n¡Estadísticas mostradas! Pulse ENTER para volver al menú principal: ");
@@ -1061,19 +1081,20 @@ void adminMenu() {
 		fgets(strAux, 2, stdin);
 		fflush(stdin);
 
-		logFile(INFO, "mainMenu<<");
+		logger->logFile(INFO, "mainMenu<<");
 		mainMenu(true);
 		break;
 
 	case 4:
-		logFile(INFO, "Opción 4 de adminMenu seleccionada (mainMenu<<)");
+		logger->logFile(INFO,
+				"Opción 4 de adminMenu seleccionada (mainMenu<<)");
 		mainMenu(true);
 		break;
 	}
 }
 
 // NIVEL DE MENÚ: 2
-void userMenu() {
+void Menu::userMenu() {
 	char strAux[2];
 	int opt;
 	char str[10];
@@ -1092,12 +1113,14 @@ void userMenu() {
 
 	switch (opt) {
 	case 1:
-		logFile(INFO, "Opción 1 de userMenu seleccionada (>>queryBDMenu)");
+		logger->logFile(INFO,
+				"Opción 1 de userMenu seleccionada (>>queryBDMenu)");
 		queryBDMenu(true);
 		break;
 
 	case 2:
-		logFile(INFO, "Opción 2 de userMenu seleccionada (showStatistics)");
+		logger->logFile(INFO,
+				"Opción 2 de userMenu seleccionada (showStatistics)");
 
 		printf("\n------------\n");
 		printf("ESTADÍSTICAS\n");
@@ -1107,19 +1130,20 @@ void userMenu() {
 
 		// SENDING command SHOWSTATS
 		strcpy(sendBuff, "SHOWSTATS");
-		send(s, sendBuff, sizeof(sendBuff), 0);
+		send(*s, sendBuff, sizeof(sendBuff), 0);
+		printf("%s\n", sendBuff);
 
 		// RECEIVING response to command SHOWSTATS from the server
-		recv(s, recvBuff, sizeof(recvBuff), 0);
+		recv(*s, recvBuff, sizeof(recvBuff), 0);
 		printf("Media de los precios de los productos: %s\n", recvBuff);
 //		cout << "Media de los precios de los productos: " << recvBuff << endl;
 
-		recv(s, recvBuff, sizeof(recvBuff), 0);
+		recv(*s, recvBuff, sizeof(recvBuff), 0);
 		printf("Media de los metros cuadrados de los supermercados: %s\n",
 				recvBuff);
 //		cout << "Media de los metros cuadrados de los supermercados: " << recvBuff << endl;
 
-		logFile(INFO, "Estadísticas mostradas");
+		logger->logFile(INFO, "Estadísticas mostradas");
 
 		printf(
 				"\n¡Estadísticas mostradas! Pulse ENTER para volver al menú principal: ");
@@ -1127,19 +1151,19 @@ void userMenu() {
 		fgets(strAux, 2, stdin);
 		fflush(stdin);
 
-		logFile(INFO, "mainMenu<<");
+		logger->logFile(INFO, "mainMenu<<");
 		mainMenu(true);
 		break;
 
 	case 3:
-		logFile(INFO, "Opción 3 de userMenu seleccionada (mainMenu<<)");
+		logger->logFile(INFO, "Opción 3 de userMenu seleccionada (mainMenu<<)");
 		mainMenu(true);
 		break;
 	}
 }
 
 // NIVEL DE MENÚ: 2
-void adminAccessMenu() {
+void Menu::adminAccessMenu() {
 	int pass;
 	char str[10];
 
@@ -1154,27 +1178,28 @@ void adminAccessMenu() {
 	sscanf(str, "%i", &pass);
 
 	int propPass;
-	sscanf(properties.propValue[2], "%i", &propPass);
+	sscanf(this->prop->propValue[2], "%i", &propPass);
 
 	if (pass == propPass) {
-		logFile(INFO, "Contraseña de administrador correcta (>>adminMenu)");
+		logger->logFile(INFO,
+				"Contraseña de administrador correcta (>>adminMenu)");
 		adminMenu();
 	} else if (str[0] == 'q') {
-		logFile(INFO, "mainMenu<<");
+		logger->logFile(INFO, "mainMenu<<");
 		mainMenu(true);
 	} else {
-		logFile(INFO, "adminAccessMenu<<");
+		logger->logFile(INFO, "adminAccessMenu<<");
 		adminAccessMenu();
 	}
 
 }
 
 // NIVEL DE MENÚ: 1
-void mainMenu(bool b) {
+void Menu::mainMenu(bool b) {
 	int opt;
 	char str[10];
 
-	loadProperties(&properties, "config.prop");
+	prop->loadProperties(prop, "config.prop");
 
 	if (b) {
 		printf("\n------------\n");
@@ -1197,19 +1222,32 @@ void mainMenu(bool b) {
 
 	switch (opt) {
 	case 1:
-		logFile(INFO, "Opción 1 de mainMenu seleccionada (>>userMenu)");
+		logger->logFile(INFO, "Opción 1 de mainMenu seleccionada (>>userMenu)");
 		userMenu();
 		break;
 
 	case 2:
-		logFile(INFO, "Opción 2 de mainMenu seleccionada (>>adminMenu)");
+		logger->logFile(INFO,
+				"Opción 2 de mainMenu seleccionada (>>adminMenu)");
 		adminAccessMenu();
 		break;
 
 	case 3:
-		logFile(END,
+		logger->logFile(END,
 				"Opción 3 de mainMenu seleccionada (ejecución finalizada)");
 		exit(0);
 	}
 
+}
+
+void Menu::setProperties(Properties *prop) {
+	this->prop = prop;
+}
+
+void Menu::setLogger(Logger *logger) {
+	this->logger = logger;
+}
+
+void  Menu::setData(Data d) {
+	this->data = &d;
 }

@@ -62,3 +62,22 @@ Supermercado*& Data::getSupermercados() {
 void Data::setSupermercados(Supermercado *&supermercados) {
 	this->supermercados = supermercados;
 }
+
+void Data::addProducto(Producto p) {
+	Producto *prod = new Producto[num_prods];
+	for (int i = 0; i < num_prods; ++i) {
+		prod[i] = productos[i];
+	}
+	prod[num_prods] = p;
+	this->productos = prod;
+	this->num_prods++;
+}
+void Data::addSupermercado(Supermercado s) {
+	Supermercado *smkt = new Supermercado[num_smkts];
+	for (int i = 0; i < num_smkts; ++i) {
+		smkt[i] = supermercados[i];
+	}
+	smkt[num_smkts] = s;
+	this->supermercados = smkt;
+	this->num_smkts++;
+}

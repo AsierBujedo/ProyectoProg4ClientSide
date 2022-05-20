@@ -1,19 +1,20 @@
 /*
- * logger.c
+ * Logger.cpp
  *
  *  Created on: 19 mar. 2022
  *      Author: asier
  */
 
-#include "logger.h"
-#include "../properties/properties.h"
+#include "Logger.h"
+
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+#include "../properties/Properties.h"
 
 static FILE *f;
 
-void openLogger(char name[]) {
+void Logger::openLogger(char name[]) {
 	f = fopen(name, "w");
 	fprintf(f,
 			"------------------------------\nFichero log - DEUSTOMARKET\n------------------------------\n");
@@ -21,12 +22,12 @@ void openLogger(char name[]) {
 			"\n------------------------------\nFichero log - DEUSTOMARKET\n------------------------------\n");
 }
 
-int closeLogger() {
+int Logger::closeLogger() {
 	fprintf(f, "\n\nFINAL DEL ARCHIVO");
 	return fclose(f);
 }
 
-void logFile(LEVEL l, char desc[]) {
+void Logger::logFile(LEVEL l, char desc[]) {
 
 	if (l == INFO) {
 		char buffer[100];

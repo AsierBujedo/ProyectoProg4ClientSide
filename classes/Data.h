@@ -28,6 +28,8 @@ public:
 	void setProductos(Producto *&productos);
 	Supermercado*& getSupermercados();
 	void setSupermercados(Supermercado *&supermercados);
+	void addProducto(Producto p);
+	void addSupermercado(Supermercado s);
 };
 
 #endif /* CLASSES_DATA_H_ */
