@@ -6,8 +6,8 @@
  */
 
 #include "Supermercado.h"
-
 #include "Supermercado.h"
+
 #include <string.h>
 
 Supermercado::Supermercado() {

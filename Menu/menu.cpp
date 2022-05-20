@@ -14,8 +14,8 @@
 
 #include <iostream>
 
-#include "../logger/Logger.h"
-#include "../properties/Properties.h"
+#include "../Logger/Logger.h"
+#include "../Properties/Properties.h"
 
 #define MAX_LINE 40
 

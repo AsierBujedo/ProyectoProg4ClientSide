@@ -5,10 +5,11 @@
  *      Author: asier
  */
 
-#include "logger/Logger.h"
-#include "menu/Menu.h"
-#include "classes/Data.h"
 #include <stdio.h>
+
+#include "Classes/Data.h"
+#include "Logger/Logger.h"
+#include "Menu/Menu.h"
 
 int main() {
 	Menu menu;

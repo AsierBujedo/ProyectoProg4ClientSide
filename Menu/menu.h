@@ -4,11 +4,12 @@
  *  Created on: 1 abr. 2022
  *      Author: Iker López
  */
-#include "..\properties\Properties.h"
-#include "../classes/Data.h"
-#include "..\logger\Logger.h"
 #include <stdbool.h>
 #include <winsock2.h>
+
+#include "../Classes/Data.h"
+#include "../Logger/Logger.h"
+#include "../Properties/Properties.h"
 
 #ifndef MENU_H_
 #define MENU_H_
