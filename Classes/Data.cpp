@@ -7,77 +7,99 @@
 
 #include "Data.h"
 
-Data::Data(Producto *productos, int num_prods, Supermercado *supermercados,
-		int num_smkts) {
-	Producto *p = new Producto[num_prods];
-	for (int i = 0; i < num_prods; ++i) {
-		p[i] = productos[i];
+Data::Data() {
+	this->provincias = new Provincia[0];
+	this->num_provincias = 0;
+	this->ciudades = new Ciudad[0];
+	this->num_ciudades = 0;
+}
+
+Data::Data(Provincia *provincias, int num_provincias, Ciudad *ciudades,
+		int num_ciudades) {
+	this->provincias = new Provincia[num_provincias];
+	for (int i = 0; i < num_provincias; ++i) {
+		this->provincias[i] = provincias[i];
 	}
-	this->productos = p;
 
-	this->num_prods = num_prods;
+	this->num_provincias = num_provincias;
 
-	Supermercado *s = new Supermercado[num_smkts];
-	for (int i = 0; i < num_smkts; ++i) {
-		s[i] = supermercados[i];
+	this->ciudades = new Ciudad[num_ciudades];
+	for (int i = 0; i < num_ciudades; ++i) {
+		this->ciudades[i] = ciudades[i];
 	}
-	this->supermercados = s;
 
-	this->num_smkts = num_smkts;
+	this->num_ciudades = num_ciudades;
 }
 
 Data::~Data() {
-	delete this->productos;
-	delete this->supermercados;
+	delete[] provincias;
+	delete[] ciudades;
 }
 
-int Data::getNumProds() const {
-	return num_prods;
-}
-
-void Data::setNumProds(int numProds) {
-	num_prods = numProds;
-}
-
-int Data::getNumSmkts() const {
-	return num_smkts;
-}
-
-void Data::setNumSmkts(int numSmkts) {
-	num_smkts = numSmkts;
-}
-
-Producto*& Data::getProductos() {
-	return productos;
-}
-
-void Data::setProductos(Producto *&productos) {
-	this->productos = productos;
-}
-
-Supermercado*& Data::getSupermercados() {
-	return supermercados;
-}
-
-void Data::setSupermercados(Supermercado *&supermercados) {
-	this->supermercados = supermercados;
-}
-
-void Data::addProducto(Producto p) {
-	Producto *prod = new Producto[num_prods];
-	for (int i = 0; i < num_prods; ++i) {
-		prod[i] = productos[i];
+Data::Data(const Data &other) {
+	this->provincias = new Provincia[other.num_provincias];
+	for (int i = 0; i < other.num_provincias; ++i) {
+		this->provincias[i] = other.provincias[i];
 	}
-	prod[num_prods] = p;
-	this->productos = prod;
-	this->num_prods++;
-}
-void Data::addSupermercado(Supermercado s) {
-	Supermercado *smkt = new Supermercado[num_smkts];
-	for (int i = 0; i < num_smkts; ++i) {
-		smkt[i] = supermercados[i];
+
+	this->num_provincias = other.num_provincias;
+
+	this->ciudades = new Ciudad[other.num_ciudades];
+	for (int i = 0; i < other.num_ciudades; ++i) {
+		this->ciudades[i] = other.ciudades[i];
 	}
-	smkt[num_smkts] = s;
-	this->supermercados = smkt;
-	this->num_smkts++;
+
+	this->num_ciudades = other.num_ciudades;
+}
+
+Ciudad*& Data::getCiudades() {
+	return ciudades;
+}
+
+void Data::setCiudades(Ciudad *&ciudades) {
+	this->ciudades = ciudades;
+}
+
+int Data::getNumCiudades() {
+	return num_ciudades;
+}
+
+void Data::setNumCiudades(int numCiudades) {
+	num_ciudades = numCiudades;
+}
+
+int Data::getNumProvincias() {
+	return num_provincias;
+}
+
+void Data::setNumProvincias(int numProvincias) {
+	num_provincias = numProvincias;
+}
+
+Provincia*& Data::getProvincias() {
+	return provincias;
+}
+
+void Data::setProvincias(Provincia *&provincias) {
+	this->provincias = provincias;
+}
+
+void Data::addProvincia(Provincia p) {
+	Provincia *provincias = new Provincia[num_provincias];
+	for (int i = 0; i < num_provincias; ++i) {
+		provincias[i] = this->provincias[i];
+	}
+	provincias[num_provincias] = p;
+	this->provincias = provincias;
+	this->num_provincias++;
+}
+
+void Data::addCiudad(Ciudad c) {
+	Ciudad *ciudades = new Ciudad[num_ciudades];
+	for (int i = 0; i < num_ciudades; ++i) {
+		ciudades[i] = this->ciudades[i];
+	}
+	ciudades[num_ciudades] = c;
+	this->ciudades = ciudades;
+	this->num_ciudades++;
 }

@@ -6,16 +6,14 @@
  */
 
 #include "Menu.h"
-
+#include "../Logger/Logger.h"
+#include "../Classes/Ciudad.h"
+#include "../Properties/Properties.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <winsock2.h>
-
 #include <iostream>
-
-#include "../Logger/Logger.h"
-#include "../Properties/Properties.h"
+#include <winsock2.h>
 
 #define MAX_LINE 40
 
@@ -880,7 +878,9 @@ void Menu::queryBDMenu(bool b) {
 	printf("-----------------\n\n");
 	printf("1. Visualizar supermercados\n");
 	printf("2. Visualizar productos\n");
-	printf("3. Volver a menú principal\n");
+	printf("3. Visualizar provincias\n");
+	printf("4. Visualizar ciudades\n");
+	printf("5. Volver a menú principal\n");
 	printf("Introduzca una opción: ");
 	fflush(stdout);
 	fgets(str, 2, stdin);
@@ -1012,7 +1012,142 @@ void Menu::queryBDMenu(bool b) {
 
 	case 3:
 		logger->logFile(INFO,
-				"Opción 3 de queryBDMenu seleccionada (mainMenu<<)");
+				"Opción 3 de queryBDMenu seleccionada (showProvinces)");
+
+		if (b) {
+			printf("\n----------------------------\n");
+			printf("LISTA COMPLETA DE PROVINCIAS\n");
+			printf("----------------------------\n\n");
+		}
+
+		printf("CODIGO || NOMBRE\n\n");
+
+		if (data.num_provincias != 0) {
+			for (int i = 0; i < data.num_provincias; ++i) {
+				printf("%i || ", data.provincias[i].cod_prov);
+				printf("%s\n", data.provincias[i].nom_prov);
+			}
+
+		} else {
+			// EQUIVALENTE A showProvinces(true) --------------------------------------------------
+
+			// SENDING command SHOWPROVS
+			strcpy(sendBuff, "SHOWPROVS");
+			send(*s, sendBuff, sizeof(sendBuff), 0);
+			printf("%s\n", sendBuff);
+
+			// RECEIVING response to command SHOWPROVS from the server
+			recv(*s, recvBuff, sizeof(recvBuff), 0);
+
+			while (strcmp(recvBuff, "END")) {
+				printf("%s || ", recvBuff);
+				int cod_prov = 0;
+				sscanf(recvBuff, "%i", &cod_prov);
+				//cout << recvBuff << " || " << endl;
+
+				recv(*s, recvBuff, sizeof(recvBuff), 0);
+				printf("%s\n", recvBuff);
+				char *nom_prov = new char[MAX_LINE];
+				sscanf(recvBuff, "%s", nom_prov);
+				//cout << recvBuff << " || " << endl;
+
+				recv(*s, recvBuff, sizeof(recvBuff), 0);
+
+				Provincia p(cod_prov, nom_prov);
+				data.addProvincia(p);
+			}
+
+			// --------------------------------------------------------------------------------
+		}
+
+		logger->logFile(INFO, "Lista completa de provincias mostrada");
+
+		if (b) {
+			printf(
+					"\n¡Lista completa de provincias mostrada! Pulse ENTER para volver al menú principal: ");
+			fflush(stdout);
+			fgets(strAux, 2, stdin);
+			fflush(stdin);
+		}
+
+		logger->logFile(INFO, "mainMenu<<");
+		mainMenu(true);
+		break;
+
+	case 4:
+		logger->logFile(INFO,
+				"Opción 4 de queryBDMenu seleccionada (showCities)");
+
+		if (b) {
+			printf("\n--------------------------\n");
+			printf("LISTA COMPLETA DE CIUDADES\n");
+			printf("--------------------------\n\n");
+		}
+
+		printf("CODIGO || NOMBRE || CODIGO_PROV\n\n");
+
+		if (data.num_ciudades != 0) {
+			for (int i = 0; i < data.num_ciudades; ++i) {
+				printf("%i || ", data.ciudades[i].cod_ciu);
+				printf("%s || ", data.ciudades[i].nom_ciu);
+				printf("%i\n", data.ciudades[i].cod_prov);
+			}
+
+		} else {
+			// EQUIVALENTE A showCities(true) --------------------------------------------------
+
+			// SENDING command SHOWCITIES
+			strcpy(sendBuff, "SHOWCITIES");
+			send(*s, sendBuff, sizeof(sendBuff), 0);
+			printf("%s\n", sendBuff);
+
+			// RECEIVING response to command SHOWCITIES from the server
+			recv(*s, recvBuff, sizeof(recvBuff), 0);
+
+			while (strcmp(recvBuff, "END")) {
+				printf("%s || ", recvBuff);
+				int cod_ciu = 0;
+				sscanf(recvBuff, "%i", &cod_ciu);
+				//cout << recvBuff << " || " << endl;
+
+				recv(*s, recvBuff, sizeof(recvBuff), 0);
+				printf("%s || ", recvBuff);
+				char *nom_ciu = new char[MAX_LINE];
+				sscanf(recvBuff, "%s", nom_ciu);
+				//cout << recvBuff << " || " << endl;
+
+				recv(*s, recvBuff, sizeof(recvBuff), 0);
+				printf("%s\n", recvBuff);
+				int cod_prov = 0;
+				sscanf(recvBuff, "%i", &cod_prov);
+				//cout << recvBuff << "/n" << endl;
+
+				recv(*s, recvBuff, sizeof(recvBuff), 0);
+
+				Ciudad c(cod_ciu, nom_ciu, cod_prov);
+				data.addCiudad(c);
+			}
+
+			// --------------------------------------------------------------------------------
+		}
+
+		logger->logFile(INFO, "Lista completa de ciudades mostrada");
+
+		if (b) {
+			printf(
+					"\n¡Lista completa de ciudades mostrada! Pulse ENTER para volver al menú principal: ");
+			fflush(stdout);
+			fgets(strAux, 2, stdin);
+			fflush(stdin);
+		}
+
+		logger->logFile(INFO, "mainMenu<<");
+		mainMenu(true);
+		break;
+
+	case 5:
+		logger->logFile(INFO,
+				"Opción 5 de queryBDMenu seleccionada (mainMenu<<)");
 		mainMenu(true);
 		break;
 	}
@@ -1248,6 +1383,6 @@ void Menu::setLogger(Logger *logger) {
 	this->logger = logger;
 }
 
-void  Menu::setData(Data d) {
-	this->data = &d;
+void Menu::setData(Data d) {
+	this->data = d;
 }
