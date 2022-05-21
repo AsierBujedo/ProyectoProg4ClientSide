@@ -7,9 +7,9 @@
 
 #include "../Classes/Data.h"
 #include "../Logger/Logger.h"
-#include "../Properties/Properties.h"
 #include <stdbool.h>
 #include <winsock2.h>
+#include "../Properties/Properties.h"
 
 #ifndef MENU_H_
 #define MENU_H_

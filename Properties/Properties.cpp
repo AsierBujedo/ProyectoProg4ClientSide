@@ -6,6 +6,7 @@
  */
 
 #include "Properties.h"
+
 #include "../Logger/Logger.h"
 #include <stdio.h>
 #include <stdlib.h>

@@ -6,14 +6,15 @@
  */
 
 #include "Menu.h"
+
 #include "../Logger/Logger.h"
 #include "../Classes/Ciudad.h"
-#include "../Properties/Properties.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <iostream>
 #include <winsock2.h>
+#include "../Properties/Properties.h"
 
 #define MAX_LINE 40
 
@@ -1023,6 +1024,7 @@ void Menu::queryBDMenu(bool b) {
 		printf("CODIGO || NOMBRE\n\n");
 
 		if (data.num_provincias != 0) {
+			printf("He entrado en el if\n");
 			for (int i = 0; i < data.num_provincias; ++i) {
 				printf("%i || ", data.provincias[i].cod_prov);
 				printf("%s\n", data.provincias[i].nom_prov);
@@ -1087,6 +1089,7 @@ void Menu::queryBDMenu(bool b) {
 		printf("CODIGO || NOMBRE || CODIGO_PROV\n\n");
 
 		if (data.num_ciudades != 0) {
+			printf("He entrado en el if\n");
 			for (int i = 0; i < data.num_ciudades; ++i) {
 				printf("%i || ", data.ciudades[i].cod_ciu);
 				printf("%s || ", data.ciudades[i].nom_ciu);
