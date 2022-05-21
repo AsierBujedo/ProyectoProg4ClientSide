@@ -7,9 +7,9 @@
 
 #include "../Classes/Data.h"
 #include "../Logger/Logger.h"
+#include "../Properties/Properties.h"
 #include <stdbool.h>
 #include <winsock2.h>
-#include "../Properties/Properties.h"
 
 #ifndef MENU_H_
 #define MENU_H_
@@ -26,10 +26,10 @@ public:
 	void adminAccessMenu();
 	void userMenu();
 	void adminMenu();
-	void queryBDMenu(bool b); // Se ha añadido el argumento bool b
+	void queryBDMenu(bool b);
 	void updateBDMenu();
-	void manageSuperMenu(bool b); // Se ha añadido el argumento bool b
-	void manageProdMenu(bool b); // Se ha añadido el argumento bool b
+	void manageSuperMenu(bool b);
+	void manageProdMenu(bool b);
 	void setProperties(Properties *prop);
 	void setLogger(Logger *logger);
 	void setData(Data d);

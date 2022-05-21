@@ -19,7 +19,8 @@ public:
 	int num_ciudades;
 public:
 	Data();
-	Data(Provincia *provincias, int num_provincias, Ciudad *ciudades, int num_ciudades);
+	Data(Provincia *provincias, int num_provincias, Ciudad *ciudades,
+			int num_ciudades);
 	virtual ~Data();
 	Data(const Data &other);
 	Ciudad*& getCiudades();

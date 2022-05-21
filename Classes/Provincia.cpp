@@ -20,12 +20,11 @@ Provincia::Provincia(int cod_prov, char *nom_prov) {
 	this->cod_prov = cod_prov;
 
 	this->nom_prov = new char[strlen(nom_prov) + 1];
-	sprintf(this->nom_prov, "%s", nom_prov);
-//	strcpy(this->nom_prov, nom_prov);
+	strcpy(this->nom_prov, nom_prov);
 }
 
 Provincia::~Provincia() {
-	delete[] nom_prov;
+
 }
 
 Provincia::Provincia(const Provincia &other) {
@@ -48,5 +47,6 @@ char* Provincia::getNomProv() {
 }
 
 void Provincia::setNomProv(char *nomProv) {
-	nom_prov = nomProv;
+	this->nom_prov = new char[strlen(nomProv) + 1];
+	strcpy(this->nom_prov, nomProv);
 }

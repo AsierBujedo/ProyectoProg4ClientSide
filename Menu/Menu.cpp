@@ -6,15 +6,14 @@
  */
 
 #include "Menu.h"
-
 #include "../Logger/Logger.h"
 #include "../Classes/Ciudad.h"
+#include "../Properties/Properties.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <iostream>
 #include <winsock2.h>
-#include "../Properties/Properties.h"
 
 #define MAX_LINE 40
 
@@ -66,7 +65,6 @@ int Menu::prepareSocket() {
 	printf("Connection stablished with: %s (%d)\n", inet_ntoa(server.sin_addr),
 			ntohs(server.sin_port));
 
-//	queryBDMenu(true);
 	mainMenu(false);
 
 	return 1;
@@ -121,7 +119,6 @@ void Menu::manageProdMenu(bool b) {
 			printf("%s\n", recvBuff);
 			recv(*s, recvBuff, sizeof(recvBuff), 0);
 		}
-		//cout << recvBuff << "/n" << endl;
 
 		// ----------------------------------------------------------------------------------------------------
 
@@ -217,19 +214,15 @@ void Menu::manageProdMenu(bool b) {
 
 		while (strcmp(recvBuff, "END")) {
 			printf("%s || ", recvBuff);
-			//cout << recvBuff << " || " << endl;
 
 			recv(*s, recvBuff, sizeof(recvBuff), 0);
 			printf("%s || ", recvBuff);
-			//cout << recvBuff << " || " << endl;
 
 			recv(*s, recvBuff, sizeof(recvBuff), 0);
 			printf("%s || ", recvBuff);
-			//cout << recvBuff << " || " << endl;
 
 			recv(*s, recvBuff, sizeof(recvBuff), 0);
 			printf("%s\n", recvBuff);
-			//cout << recvBuff << "/n" << endl;
 
 			recv(*s, recvBuff, sizeof(recvBuff), 0);
 		}
@@ -316,19 +309,15 @@ void Menu::manageProdMenu(bool b) {
 
 		while (strcmp(recvBuff, "END")) {
 			printf("%s || ", recvBuff);
-			//cout << recvBuff << " || " << endl;
 
 			recv(*s, recvBuff, sizeof(recvBuff), 0);
 			printf("%s || ", recvBuff);
-			//cout << recvBuff << " || " << endl;
 
 			recv(*s, recvBuff, sizeof(recvBuff), 0);
 			printf("%s || ", recvBuff);
-			//cout << recvBuff << " || " << endl;
 
 			recv(*s, recvBuff, sizeof(recvBuff), 0);
 			printf("%s\n", recvBuff);
-			//cout << recvBuff << "/n" << endl;
 
 			recv(*s, recvBuff, sizeof(recvBuff), 0);
 		}
@@ -469,8 +458,8 @@ void Menu::manageSuperMenu(bool b) {
 
 		while (strcmp(recvBuff, "END") != 0) {
 			printf("%s\n", recvBuff);
+
 			recv(*s, recvBuff, sizeof(recvBuff), 0);
-			//cout << recvBuff << "/n" << endl;
 		}
 
 		// ----------------------------------------------------------------------------------------------------
@@ -591,27 +580,21 @@ void Menu::manageSuperMenu(bool b) {
 
 		while (strcmp(recvBuff, "END")) {
 			printf("%s || ", recvBuff);
-			//cout << recvBuff << " || " << endl;
 
 			recv(*s, recvBuff, sizeof(recvBuff), 0);
 			printf("%s || ", recvBuff);
-			//cout << recvBuff << " || " << endl;
 
 			recv(*s, recvBuff, sizeof(recvBuff), 0);
 			printf("%s || ", recvBuff);
-			//cout << recvBuff << " || " << endl;
 
 			recv(*s, recvBuff, sizeof(recvBuff), 0);
 			printf("%s || ", recvBuff);
-			//cout << recvBuff << " || " << endl;
 
 			recv(*s, recvBuff, sizeof(recvBuff), 0);
 			printf("%s || ", recvBuff);
-			//cout << recvBuff << " || " << endl;
 
 			recv(*s, recvBuff, sizeof(recvBuff), 0);
 			printf("%s\n", recvBuff);
-			//cout << recvBuff << "\n" << endl;
 
 			recv(*s, recvBuff, sizeof(recvBuff), 0);
 		}
@@ -700,27 +683,22 @@ void Menu::manageSuperMenu(bool b) {
 
 		while (strcmp(recvBuff, "END")) {
 			printf("%s || ", recvBuff);
-			//cout << recvBuff << " || " << endl;
 
 			recv(*s, recvBuff, sizeof(recvBuff), 0);
 			printf("%s || ", recvBuff);
-			//cout << recvBuff << " || " << endl;
 
 			recv(*s, recvBuff, sizeof(recvBuff), 0);
 			printf("%s || ", recvBuff);
-			//cout << recvBuff << " || " << endl;
 
 			recv(*s, recvBuff, sizeof(recvBuff), 0);
 			printf("%s || ", recvBuff);
-			//cout << recvBuff << " || " << endl;
 
 			recv(*s, recvBuff, sizeof(recvBuff), 0);
 			printf("%s || ", recvBuff);
-			//cout << recvBuff << " || " << endl;
 
 			recv(*s, recvBuff, sizeof(recvBuff), 0);
 			printf("%s\n", recvBuff);
-			//cout << recvBuff << "\n" << endl;
+
 			recv(*s, recvBuff, sizeof(recvBuff), 0);
 		}
 
@@ -888,7 +866,7 @@ void Menu::queryBDMenu(bool b) {
 	fgets(str, 2, stdin);
 	fflush(stdin);
 	sscanf(str, "%i", &opt);
-//	opt = 3;
+
 	switch (opt) {
 	case 1:
 		logger->logFile(INFO,
@@ -915,27 +893,22 @@ void Menu::queryBDMenu(bool b) {
 
 		while (strcmp(recvBuff, "END")) {
 			printf("%s || ", recvBuff);
-			//cout << recvBuff << " || " << endl;
 
 			recv(*s, recvBuff, sizeof(recvBuff), 0);
 			printf("%s || ", recvBuff);
-			//cout << recvBuff << " || " << endl;
 
 			recv(*s, recvBuff, sizeof(recvBuff), 0);
 			printf("%s || ", recvBuff);
-			//cout << recvBuff << " || " << endl;
 
 			recv(*s, recvBuff, sizeof(recvBuff), 0);
 			printf("%s || ", recvBuff);
-			//cout << recvBuff << " || " << endl;
 
 			recv(*s, recvBuff, sizeof(recvBuff), 0);
 			printf("%s || ", recvBuff);
-			//cout << recvBuff << " || " << endl;
 
 			recv(*s, recvBuff, sizeof(recvBuff), 0);
 			printf("%s\n", recvBuff);
-			//cout << recvBuff << "\n" << endl;
+
 			recv(*s, recvBuff, sizeof(recvBuff), 0);
 		}
 
@@ -979,19 +952,15 @@ void Menu::queryBDMenu(bool b) {
 
 		while (strcmp(recvBuff, "END")) {
 			printf("%s || ", recvBuff);
-			//cout << recvBuff << " || " << endl;
 
 			recv(*s, recvBuff, sizeof(recvBuff), 0);
 			printf("%s || ", recvBuff);
-			//cout << recvBuff << " || " << endl;
 
 			recv(*s, recvBuff, sizeof(recvBuff), 0);
 			printf("%s || ", recvBuff);
-			//cout << recvBuff << " || " << endl;
 
 			recv(*s, recvBuff, sizeof(recvBuff), 0);
 			printf("%s\n", recvBuff);
-			//cout << recvBuff << "/n" << endl;
 
 			recv(*s, recvBuff, sizeof(recvBuff), 0);
 		}
@@ -1025,7 +994,7 @@ void Menu::queryBDMenu(bool b) {
 		printf("CODIGO || NOMBRE\n\n");
 
 		if (data.num_provincias != 0) {
-			printf("He entrado en el if\n");
+			printf("Mostrando provincias almacenadas en local\n");
 			for (int i = 0; i < data.num_provincias; ++i) {
 				printf("%i || ", data.provincias[i].cod_prov);
 				printf("%s\n", data.provincias[i].nom_prov);
@@ -1045,25 +1014,14 @@ void Menu::queryBDMenu(bool b) {
 			while (strcmp(recvBuff, "END")) {
 				printf("%s || ", recvBuff);
 				int cod_prov = atoi(recvBuff);
-				//cout << recvBuff << " || " << endl;
 
 				recv(*s, recvBuff, sizeof(recvBuff), 0);
 				printf("%s\n", recvBuff);
 				char *nom_prov = new char[MAX_LINE];
 				sprintf(nom_prov, "%s", recvBuff);
-				//cout << recvBuff << " || " << endl;
 
-//				Provincia p(cod_prov, nom_prov);
-				Provincia p;
-				p.setCodProv(cod_prov);
-
-				p.nom_prov = new char[MAX_LINE];
-				sprintf(p.nom_prov, "%s", nom_prov);
-
-				printf("%i", p.cod_prov);
-				printf("%s\n", p.nom_prov);
-
-				this->data.addProvincia(p);
+				Provincia p(cod_prov, nom_prov);
+				data.addProvincia(p);
 
 				recv(*s, recvBuff, sizeof(recvBuff), 0);
 			}
@@ -1098,7 +1056,7 @@ void Menu::queryBDMenu(bool b) {
 		printf("CODIGO || NOMBRE || CODIGO_PROV\n\n");
 
 		if (data.num_ciudades != 0) {
-			printf("He entrado en el if\n");
+			printf("Mostrando ciudades almacenadas en local\n");
 			for (int i = 0; i < data.num_ciudades; ++i) {
 				printf("%i || ", data.ciudades[i].cod_ciu);
 				printf("%s || ", data.ciudades[i].nom_ciu);
@@ -1118,24 +1076,19 @@ void Menu::queryBDMenu(bool b) {
 
 			while (strcmp(recvBuff, "END")) {
 				printf("%s || ", recvBuff);
-//				int cod_ciu = atoi(recvBuff);
-				//sscanf(recvBuff, "%i", &cod_ciu);
-				//cout << recvBuff << " || " << endl;
+				int cod_ciu = atoi(recvBuff);
 
 				recv(*s, recvBuff, sizeof(recvBuff), 0);
 				printf("%s || ", recvBuff);
-//				char *nom_ciu = new char[MAX_LINE];
-//				sscanf(recvBuff, "%s", nom_ciu);
-				//cout << recvBuff << " || " << endl;
+				char *nom_ciu = new char[MAX_LINE];
+				sscanf(recvBuff, "%s", nom_ciu);
 
 				recv(*s, recvBuff, sizeof(recvBuff), 0);
 				printf("%s\n", recvBuff);
-//				int cod_prov_c = atoi(recvBuff);
-				//sscanf(recvBuff, "%i", &cod_prov_c);
-				//cout << recvBuff << "/n" << endl;
+				int cod_prov_c = atoi(recvBuff);
 
-//				Ciudad c(cod_ciu, nom_ciu, cod_prov_c);
-//				data.addCiudad(c);
+				Ciudad c(cod_ciu, nom_ciu, cod_prov_c);
+				data.addCiudad(c);
 
 				recv(*s, recvBuff, sizeof(recvBuff), 0);
 			}
@@ -1213,12 +1166,10 @@ void Menu::adminMenu() {
 		// RECEIVING response to command SHOWSTATS from the server
 		recv(*s, recvBuff, sizeof(recvBuff), 0);
 		printf("Media de los precios de los productos: %s\n", recvBuff);
-//		cout << "Media de los precios de los productos: " << recvBuff << endl;
 
 		recv(*s, recvBuff, sizeof(recvBuff), 0);
 		printf("Media de los metros cuadrados de los supermercados: %s\n",
 				recvBuff);
-//		cout << "Media de los metros cuadrados de los supermercados: " << recvBuff << endl;
 
 		logger->logFile(INFO, "Estadísticas mostradas");
 
@@ -1273,8 +1224,6 @@ void Menu::userMenu() {
 		printf("ESTADÍSTICAS\n");
 		printf("------------\n\n");
 
-		//fflush(stdout);
-
 		// SENDING command SHOWSTATS
 		strcpy(sendBuff, "SHOWSTATS");
 		send(*s, sendBuff, sizeof(sendBuff), 0);
@@ -1283,12 +1232,10 @@ void Menu::userMenu() {
 		// RECEIVING response to command SHOWSTATS from the server
 		recv(*s, recvBuff, sizeof(recvBuff), 0);
 		printf("Media de los precios de los productos: %s\n", recvBuff);
-//		cout << "Media de los precios de los productos: " << recvBuff << endl;
 
 		recv(*s, recvBuff, sizeof(recvBuff), 0);
 		printf("Media de los metros cuadrados de los supermercados: %s\n",
 				recvBuff);
-//		cout << "Media de los metros cuadrados de los supermercados: " << recvBuff << endl;
 
 		logger->logFile(INFO, "Estadísticas mostradas");
 

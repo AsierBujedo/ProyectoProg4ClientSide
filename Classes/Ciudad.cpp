@@ -22,7 +22,7 @@ Ciudad::Ciudad(int cod_ciu, char *nom_ciu, int cod_prov) {
 }
 
 Ciudad::~Ciudad() {
-	delete[] nom_ciu;
+
 }
 
 Ciudad::Ciudad(const Ciudad &other) {
@@ -55,6 +55,7 @@ char* Ciudad::getNomCiu() {
 }
 
 void Ciudad::setNomCiu(char *nomCiu) {
-	nom_ciu = nomCiu;
+	this->nom_ciu = new char[strlen(nomCiu) + 1];
+	strcpy(this->nom_ciu, nomCiu);
 }
 
