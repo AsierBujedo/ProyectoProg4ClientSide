@@ -1106,8 +1106,8 @@ void Menu::queryBDMenu(bool b) {
 
 			while (strcmp(recvBuff, "END")) {
 				printf("%s || ", recvBuff);
-				int cod_ciu = 0;
-				sscanf(recvBuff, "%i", &cod_ciu);
+				int cod_ciu = atoi(recvBuff);
+				//sscanf(recvBuff, "%i", &cod_ciu);
 				//cout << recvBuff << " || " << endl;
 
 				recv(*s, recvBuff, sizeof(recvBuff), 0);
@@ -1118,13 +1118,13 @@ void Menu::queryBDMenu(bool b) {
 
 				recv(*s, recvBuff, sizeof(recvBuff), 0);
 				printf("%s\n", recvBuff);
-				int cod_prov = 0;
-				sscanf(recvBuff, "%i", &cod_prov);
+				int cod_prov_c = atoi(recvBuff);
+				//sscanf(recvBuff, "%i", &cod_prov_c);
 				//cout << recvBuff << "/n" << endl;
 
 				recv(*s, recvBuff, sizeof(recvBuff), 0);
 
-				Ciudad c(cod_ciu, nom_ciu, cod_prov);
+				Ciudad c(cod_ciu, nom_ciu, cod_prov_c);
 				data.addCiudad(c);
 			}
 
