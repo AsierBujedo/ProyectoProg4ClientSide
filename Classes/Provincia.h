@@ -14,7 +14,7 @@ public:
 	char *nom_prov;
 public:
 	Provincia();
-	Provincia(int cod_prov, char *nom_prov);
+	Provincia(int cod_prov, char *nom_provincia);
 	virtual ~Provincia();
 	Provincia(const Provincia &other);
 	int getCodProv();

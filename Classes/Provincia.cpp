@@ -6,7 +6,11 @@
  */
 
 #include "Provincia.h"
+#include <stdio.h>
 #include <string.h>
+#include <iostream>
+
+using namespace std;
 
 Provincia::Provincia() {
 
@@ -16,7 +20,8 @@ Provincia::Provincia(int cod_prov, char *nom_prov) {
 	this->cod_prov = cod_prov;
 
 	this->nom_prov = new char[strlen(nom_prov) + 1];
-	strcpy(this->nom_prov, nom_prov);
+	sprintf(this->nom_prov, "%s", nom_prov);
+//	strcpy(this->nom_prov, nom_prov);
 }
 
 Provincia::~Provincia() {
@@ -45,4 +50,3 @@ char* Provincia::getNomProv() {
 void Provincia::setNomProv(char *nomProv) {
 	nom_prov = nomProv;
 }
-

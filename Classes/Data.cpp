@@ -8,9 +8,9 @@
 #include "Data.h"
 
 Data::Data() {
-	this->provincias = new Provincia[0];
+	this->provincias = new Provincia[1];
 	this->num_provincias = 0;
-	this->ciudades = new Ciudad[0];
+	this->ciudades = new Ciudad[1];
 	this->num_ciudades = 0;
 }
 
@@ -85,20 +85,24 @@ void Data::setProvincias(Provincia *&provincias) {
 }
 
 void Data::addProvincia(Provincia p) {
-	Provincia *provincias = new Provincia[num_provincias];
+	Provincia *provincias = new Provincia[num_provincias + 1];
+
 	for (int i = 0; i < num_provincias; ++i) {
 		provincias[i] = this->provincias[i];
 	}
+
 	provincias[num_provincias] = p;
 	this->provincias = provincias;
 	this->num_provincias++;
 }
 
 void Data::addCiudad(Ciudad c) {
-	Ciudad *ciudades = new Ciudad[num_ciudades];
+	Ciudad *ciudades = new Ciudad[num_ciudades + 1];
+
 	for (int i = 0; i < num_ciudades; ++i) {
 		ciudades[i] = this->ciudades[i];
 	}
+
 	ciudades[num_ciudades] = c;
 	this->ciudades = ciudades;
 	this->num_ciudades++;
