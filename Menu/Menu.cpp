@@ -1165,10 +1165,10 @@ void Menu::adminMenu() {
 
 		// RECEIVING response to command SHOWSTATS from the server
 		recv(*s, recvBuff, sizeof(recvBuff), 0);
-		printf("Media de los precios de los productos: %s\n", recvBuff);
+		printf("Media de los precios de los productos: %s€\n", recvBuff);
 
 		recv(*s, recvBuff, sizeof(recvBuff), 0);
-		printf("Media de los metros cuadrados de los supermercados: %s\n",
+		printf("Media de los metros cuadrados de los supermercados: %sm^2\n",
 				recvBuff);
 
 		logger->logFile(INFO, "Estadísticas mostradas");
@@ -1231,10 +1231,10 @@ void Menu::userMenu() {
 
 		// RECEIVING response to command SHOWSTATS from the server
 		recv(*s, recvBuff, sizeof(recvBuff), 0);
-		printf("Media de los precios de los productos: %s\n", recvBuff);
+		printf("Media de los precios de los productos: %s€\n", recvBuff);
 
 		recv(*s, recvBuff, sizeof(recvBuff), 0);
-		printf("Media de los metros cuadrados de los supermercados: %s\n",
+		printf("Media de los metros cuadrados de los supermercados: %sm^2\n",
 				recvBuff);
 
 		logger->logFile(INFO, "Estadísticas mostradas");
